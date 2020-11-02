@@ -1,5 +1,25 @@
 
- // generate 3 pitches 
+const keyboard = { // unicode numbers for a one-octave scale
+    65: 'C',    // a
+    87: 'C#',   // w
+    83: 'D',    // s
+    69: 'D#',   // e
+    68: 'E',    // d
+    70: 'F',    // f
+    84: 'F#',   // t
+    71: 'G',    // g
+    89: 'G#',   // y
+    72: 'A',    // h
+    85: 'A#',   // u
+    74: 'B',    // j
+    // the numbers from this object need to be played AND notated by the computer (?)
+    // The computer "plays each unicode key", while the player uses event listeners
+    // each attached to a div
+};
+
+//////////////////// PITCHES: ///////////////////////
+
+ // generate a major chord: 
 
 function makeArray() {
     let root = Math.floor(Math.random() * Math.floor(5)) + 1;
@@ -21,21 +41,17 @@ function makeArray() {
 }
 
 let choice = makeArray();
+// keep the chord above within the 12 keys on the keyboard 
 function keepInOctave () {
     if (choice[2] <= 12) {
-        // console.log(choice);
         return choice;
     } else {
-        // console.log(choice);
         console.log('Run again'); //
     }
 }
 
 const selection = keepInOctave();
-// next step: play selection
 
-// the numbers from this array need to be played AND notated by the computer
-// define the keyboard: the computer plays each unicode key, while the player uses event listeners
 function order (array) {
     let order = Math.floor(Math.random * Math.floor(5));
     const pitchA = array[0];
@@ -64,7 +80,7 @@ function order (array) {
 const finalSelection = order(selection);
 console.log(finalSelection);
 
-// define non-chord tones:
+// define the array of non-chord tones that the player can use:
 
 function defineNCTs (array) {
     let chromScale = [];
@@ -82,23 +98,22 @@ function defineNCTs (array) {
 const chromNCTs = defineNCTs(finalSelection);
 console.log(chromNCTs);
 
-// play rhythm:
 
-const keyboard = { // unicode numbers for a one-octave scale
-    65: 'C', // a
-    87: 'C#', // w
-    83: 'D', // s
-    69: 'D#', // e
-    68: 'E', // d
-    70: 'F', // f
-    84: 'F#', // t
-    71: 'G', // g
-    89: 'G#', // y
-    72: 'A', // h
-    85: 'A#', // u
-    74: 'B', // j
-    // each attached to a div
-};
+
+////////////////// GENERATE (computer) RHYTHM: /////////////////////
+
+// 3 note events separated by an even tempo (setInterval?)
+
+// next step: play selection
+
+
+
+///////////////////// HOW TO COMPARE EACH LISTENER VARIATION TO MAKE SURE THAT THEY'RE DIFFERENT /////////////////
+// Since each variation should be different, the player should limit the overlap of the 9 NCTs among variations!
+// "grade" the variations based on how many NCTs are repeated?
+// load the NCTs used by the player into an array and check for repetitions
+
+
 
 
 

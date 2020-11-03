@@ -1,21 +1,49 @@
 
 const keyboard = { // unicode numbers for a one-octave scale
-    65: 'C',    // a
-    87: 'C#',   // w
-    83: 'D',    // s
-    69: 'D#',   // e
-    68: 'E',    // d
-    70: 'F',    // f
-    84: 'F#',   // t
-    71: 'G',    // g
-    89: 'G#',   // y
-    72: 'A',    // h
-    85: 'A#',   // u
-    74: 'B',    // j
+    C: 65,    // a
+    Csharp: 87,   // w
+    D: 83,    // s
+    Dsharp: 69,   // e
+    E: 68,    // d
+    F: 70,    // f
+    Fsharp: 84,   // t
+    G: 71,    // g
+    Gsharp: 89,   // y
+    A: 72,    // h
+    Asharp: 85,   // u
+    B: 74 // j
     // the numbers from this object need to be played AND notated by the computer (?)
     // The computer "plays each unicode key", while the player uses event listeners
     // each attached to a div
 };
+
+console.log(keyboard.C);
+// document.getElementById('C').addEventListener('click', playKeys(keyboard.C));
+// function playKeys (key) {
+    
+// }
+
+const synth = new Tone.Synth().toDestination();
+const now = Tone.now()
+// trigger the attack immediately
+synth.triggerAttack("C4", now)
+// wait one second before triggering the release
+synth.triggerRelease(now + 1)
+
+// is this the way to compare??
+class Variation {
+    constructor(chordTones, nonChordTones) {
+        this.chordTones = chordTones;
+        this.nonChordTones = nonChordTones;
+      }
+      render() { // compare? 
+        //   ctx.fillStyle = this.color;
+        //   ctx.fillRect(this.x, this.y, this.width, this.height);
+      }
+  }
+
+  const computer = new Variation(finalSelection, chromNCTs);
+  const player = new Variation(0, 0, 'hotpink', 20, 20); // selections from their 5 turns?
 
 //////////////////// PITCHES: ///////////////////////
 
@@ -98,9 +126,26 @@ function defineNCTs (array) {
 const chromNCTs = defineNCTs(finalSelection);
 console.log(chromNCTs);
 
+// attach the numbers in these arrays to...collision functions from the game template?
+// remind the player of which pitches they've used
+
+// compare chromNCTs:
+// check all pitches used: total 
+// Player must provide at least 5 responses? (otherwise it's too easy)
+// can repeat chord tones but NOT NCTs?
 
 
 ////////////////// GENERATE (computer) RHYTHM: /////////////////////
+
+// Tone.js abstracts away the AudioContext time. 
+// Instead of defining all values in seconds, any method which takes time as an argument can accept a number or a string. 
+// For example "4n" is a quarter-note, "8t" is an eighth-note triplet, and "1m" is one measure.
+
+// document.querySelector('button')?.addEventListener(KEY, async () => {
+// 	await Tone.start()
+// 	console.log('audio is ready')
+// })
+
 
 // 3 note events separated by an even tempo (setInterval?)
 
@@ -109,11 +154,10 @@ console.log(chromNCTs);
 
 
 ///////////////////// HOW TO COMPARE EACH LISTENER VARIATION TO MAKE SURE THAT THEY'RE DIFFERENT /////////////////
-// Since each variation should be different, the player should limit the overlap of the 9 NCTs among variations!
-// "grade" the variations based on how many NCTs are repeated?
+// Since each variation should be different, the player should limit the overlap of the 9 NCTs among variations
+// subtract the number of *repeated* NCTs from the total
+// leave rhythmic variation up to the player?
 // load the NCTs used by the player into an array and check for repetitions
-
-
 
 
 

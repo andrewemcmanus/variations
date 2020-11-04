@@ -1,1 +1,9 @@
-
+.keyboard-holder {
+    margin: 30px auto;
+    height: 200px;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+}

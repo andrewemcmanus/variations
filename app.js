@@ -14,7 +14,7 @@ const keyboard = { // unicode numbers for a one-octave scale
     B: 74 // j
     // the numbers from this object need to be played AND notated by the computer (?)
     // The computer "plays each unicode key", while the player uses event listeners
-    // each attached to a div
+    // each attached to a div??
 };
 
 console.log(keyboard.C);
@@ -30,7 +30,7 @@ synth.triggerAttack("C4", now)
 // wait one second before triggering the release
 synth.triggerRelease(now + 1)
 
-// is this the way to compare??
+// is this the right way to compare??
 class Variation {
     constructor(chordTones, nonChordTones) {
         this.chordTones = chordTones;
@@ -43,7 +43,7 @@ class Variation {
   }
 
   const computer = new Variation(finalSelection, chromNCTs);
-  const player = new Variation(0, 0, 'hotpink', 20, 20); // selections from their 5 turns?
+  const player = new Variation(finalSelection, "allNCTs"); // selections from their 5 turns?
 
 //////////////////// PITCHES: ///////////////////////
 

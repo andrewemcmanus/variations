@@ -30,55 +30,25 @@ const keyboard = { // unicode numbers for a one-octave scale
 // // wait one second before triggering the release
 // synth.triggerRelease(now + 1)
 
-
 // document.getElementById('C').addEventListener('click', playKeys(keyboard.C));
 // tone.js here: see video
-var p1 = new Tone.players({
-    // key value assignments go here... attach "C" to a link, each key after that?
-}, function() {
+// var p1 = new Tone.players({
+//     // key value assignments go here... attach "C" to a link, each key after that?
+// }, function() {
 
-});
+// });
 
-function go() {
-    // p1.get('hihat').start;
-    Tone.Transport.bpm.value = 120;
-    var seq = new Tone.Sequence(function(time, idx)
-{
-    eval.(editor.getValue());
+// function go() {
+//     // p1.get('hihat').start;
+//     Tone.Transport.bpm.value = 120;
+//     var seq = new Tone.Sequence(function(time, idx)
+// {
+//     eval.(editor.getValue());
 
-}, [], "4n");
-}
+// }, [], "4n");
+// }
 
 // final Selection: connect to event listeners
-
-
-// is this the right way to compare??
-class Variation {
-    constructor(chordTones, nonChordTones) {
-        this.chordTones = chordTones;
-        this.nonChordTones = nonChordTones;
-      }
-      assemble() { // assemble pitches 
-        chordTones.concat(nonChordTones); // way to use this?
-      }
-  }
-
-  const computer = new Variation(finalSelection, chromNCTs);
-  const player = new Variation(finalSelection, "allNCTs"); // selections from their 5 turns?
-  computer.assemble();
-  player.assemble();
-
-  function comparePitches() {
-      if (computer.length > player.length) {
-          console.log('you lose!');
-          // use DOM to place messages on the screen
-      } 
-      if (computer.length <= player.length) {
-          // check for how many repeated pitches?
-          // if none, you win!
-      }
-
-  }
 
 //////////////////// PITCHES: ///////////////////////
 
@@ -113,7 +83,7 @@ function keepInOctave () {
     }
 }
 
-const selection = keepInOctave();
+var selection = keepInOctave();
 
 function order (array) {
     let order = Math.floor(Math.random * Math.floor(5));
@@ -140,7 +110,7 @@ function order (array) {
         return final6;
     }
 }
-const finalSelection = order(selection);
+var finalSelection = order(selection);
 console.log(finalSelection);
 
 // define the array of non-chord tones that the player can use:
@@ -158,14 +128,57 @@ function defineNCTs (array) {
     return chromScale;
 }
 
-const chromNCTs = defineNCTs(finalSelection);
-console.log(chromNCTs);
+var chromNCTs = defineNCTs(finalSelection);
+// console.log(chromNCTs);
+
+function assemble(array1, array2) {
+    const output = array1.concat(array2);
+    return output;
+}
+
+var computerChoices = assemble(finalSelection, chromNCTs);
+var playerChoices = assemble(finalSelection, allNCTs);
+
+//   const computer = new Variation(finalSelection, chromNCTs);
+//   const player = new Variation(finalSelection, "allNCTs"); // selections from their 5 turns?
+  
+function compareNumberOfPitches() {
+      if (computerChoices.length > playerChoices.length) {
+          console.log('you lose!');
+          // use DOM to place messages on the screen
+      } else if (computerChoices.length < playerChoices.length) {
+            let duplicates = [];
+            for (let i = 0; i < playerChoices.length; i++) {
+              let value = playerChoices[i];
+              if (playerChoices.indexOf(value) !== -1) {
+                duplicates.push(playerChoices[i]);
+              }
+              return duplicates;
+            }
+          }
+      }
+
+var duplicates = compareNumberOfPitches();
+
+function adjustScore() {
+    var score;
+    if (duplicates = 0) {
+        return score;
+    } else {
+        for (i = 0; i < duplicates.length; i++) {
+            var score = score - 1;
+            return score;
+        }
+    }
+}
+
+      
+
+
 
 // attach the numbers in these arrays to...collision functions from the game template?
 // remind the player of which pitches they've used
 
-// compare chromNCTs:
-// check all pitches used: total 
 // Player must provide at least 5 responses? (otherwise it's too easy)
 // can repeat chord tones but NOT NCTs?
 

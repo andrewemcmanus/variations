@@ -17,18 +17,40 @@ const keyboard = { // unicode numbers for a one-octave scale
     // each attached to a div??
 };
 
-console.log(keyboard.C);
-// document.getElementById('C').addEventListener('click', playKeys(keyboard.C));
+// console.log(keyboard.C);
+
 // function playKeys (key) {
     
 // }
 
-const synth = new Tone.Synth().toDestination();
-const now = Tone.now()
-// trigger the attack immediately
-synth.triggerAttack("C4", now)
-// wait one second before triggering the release
-synth.triggerRelease(now + 1)
+// const synth = new Tone.Synth().toDestination();
+// const now = Tone.now()
+// // trigger the attack immediately
+// synth.triggerAttack("C4", now)
+// // wait one second before triggering the release
+// synth.triggerRelease(now + 1)
+
+
+// document.getElementById('C').addEventListener('click', playKeys(keyboard.C));
+// tone.js here: see video
+var p1 = new Tone.players({
+    // key value assignments go here... attach "C" to a link, each key after that?
+}, function() {
+
+});
+
+function go() {
+    // p1.get('hihat').start;
+    Tone.Transport.bpm.value = 120;
+    var seq = new Tone.Sequence(function(time, idx)
+{
+    eval.(editor.getValue());
+
+}, [], "4n");
+}
+
+// final Selection: connect to event listeners
+
 
 // is this the right way to compare??
 class Variation {
@@ -36,14 +58,27 @@ class Variation {
         this.chordTones = chordTones;
         this.nonChordTones = nonChordTones;
       }
-      render() { // compare? 
-        //   ctx.fillStyle = this.color;
-        //   ctx.fillRect(this.x, this.y, this.width, this.height);
+      assemble() { // assemble pitches 
+        chordTones.concat(nonChordTones); // way to use this?
       }
   }
 
   const computer = new Variation(finalSelection, chromNCTs);
   const player = new Variation(finalSelection, "allNCTs"); // selections from their 5 turns?
+  computer.assemble();
+  player.assemble();
+
+  function comparePitches() {
+      if (computer.length > player.length) {
+          console.log('you lose!');
+          // use DOM to place messages on the screen
+      } 
+      if (computer.length <= player.length) {
+          // check for how many repeated pitches?
+          // if none, you win!
+      }
+
+  }
 
 //////////////////// PITCHES: ///////////////////////
 

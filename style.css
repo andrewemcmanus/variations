@@ -1,5 +1,5 @@
 .keyboard-holder {
-    margin: 30px auto;
+    margin: 30px;
     height: 200px;
     position: relative;
     user-select: none;
@@ -7,3 +7,5 @@
     -moz-user-select: none;
     -o-user-select: none;
 }
+
+/* How to make keyboard fit together? Fit into Foundation?? */

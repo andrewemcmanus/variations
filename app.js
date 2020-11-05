@@ -1,22 +1,227 @@
-const { toNamespacedPath } = require("path");
+// const { toNamespacedPath } = require("path");
 
 const keyboard = { // unicode numbers for a one-octave scale
-    C: 65,    // a
-    Csharp: 87,   // w
-    D: 83,    // s
-    Dsharp: 69,   // e
-    E: 68,    // d
-    F: 70,    // f
-    Fsharp: 84,   // t
-    G: 71,    // g
-    Gsharp: 89,   // y
-    A: 72,    // h
-    Asharp: 85,   // u
-    B: 74 // j
+    65: "C4",    // a
+    87: "C#4",   // w
+    83: "D4",    // s
+    69: "D#4",   // e
+    68: "E4",    // d
+    70: "F4",    // f
+    84: "F#4",   // t
+    71: "G4",    // g
+    89: "G#4",   // y
+    72: "A4",    // h
+    85: "A#4",   // u
+    74: "B4"     // j
     // the numbers from this object need to be played AND notated by the computer (?)
     // The computer "plays each unicode key", while the player uses event listeners
-    // each attached to a div??
+    // What does the event listener refer to, and what does the output have to be??
 };
+
+function playKeyboard(){
+
+	let pressColor = '#1BC0EA'; //color when key is pressed
+
+	var __audioSynth = new AudioSynth();
+	__audioSynth.setVolume(0.5);
+	var __octave = 4; //sets position of middle C, normally the 4th octave
+	
+	
+	var reverseLookupText = {};
+	var reverseLookup = {};
+
+	// Create a reverse lookup table.
+	for(var i in keyboard) {
+	
+		var val;
+
+		switch(i|0) { //some characters don't display like they are supposed to, so need correct values
+		
+			case 187: //equal sign
+				val = 61; //???
+				break;
+			
+			case 219: //open bracket
+				val = 91; //left window key
+				break;
+			
+			case 221: //close bracket
+				val = 93; //select key
+				break;
+			
+			case 188://comma
+				val = 44; //print screen
+				break;
+			//the fraction 3/4 is displayed for some reason if 190 wasn't replaced by 46; it's still the period key either way
+			case 190: //period
+				val = 46; //delete
+				break;
+			
+			default:
+				val = i;
+				break;
+			
+		}
+	
+		reverseLookupText[keyboard[i]] = val;
+		reverseLookup[keyboard[i]] = i;
+	
+	}
+
+	// Keys you have pressed down.
+	var keysPressed = [];
+
+	// Generate keyboard
+	let visualKeyboard = document.getElementById('keyboard');
+	let selectSound = {
+		value: "0" //piano
+	};
+
+	var iKeys = 0;
+	var iWhite = 0;
+	var notes = __audioSynth._notes; //C, C#, D....A#, B
+
+	for(var i=-2;i<=1;i++) {
+		for(var n in notes) {
+			if(n[2]!='b') {
+				var thisKey = document.createElement('div');
+				if(n.length>1) { //adding sharp sign makes 2 characters
+					thisKey.className = 'black key'; //2 classes
+					thisKey.style.width = '30px';
+					thisKey.style.height = '120px';
+					thisKey.style.left = (40 * (iWhite - 1)) + 25 + 'px';
+				} else {
+					thisKey.className = 'white key';
+					thisKey.style.width = '40px';
+					thisKey.style.height = '200px';
+					thisKey.style.left = 40 * iWhite + 'px';
+					iWhite++;
+				}
+
+				var label = document.createElement('div');
+				label.className = 'label';
+
+				let s = getDispStr(n,i,reverseLookupText);
+
+				label.innerHTML = '<b class="keyLabel">' + s + '</b>' + '<br /><br />' + n.substr(0,1) +
+					'<span name="OCTAVE_LABEL" value="' + i + '">' + (__octave + parseInt(i)) + '</span>' + (n.substr(1,1)?n.substr(1,1):'');
+				thisKey.appendChild(label);
+				thisKey.setAttribute('ID', 'KEY_' + n + ',' + i);
+				thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[n + ',' + i]));
+				visualKeyboard[n + ',' + i] = thisKey;
+				visualKeyboard.appendChild(thisKey);
+				
+				iKeys++;
+			}
+		}
+	}
+
+	visualKeyboard.style.width = iWhite * 40 + 'px';
+
+	window.addEventListener(evtListener[1], function() { n = keysPressed.length; while(n--) { fnRemoveKeyBinding({keyCode:keysPressed[n]}); } });
+	
+// Detect keypresses, play notes.
+
+	var fnPlayKeyboard = function(e) {
+	
+		var i = keysPressed.length;
+		while(i--) {
+			if(keysPressed[i]==e.keyCode) {
+				return false;	
+			}
+		}
+		keysPressed.push(e.keyCode);
+
+		if(keyboard[e.keyCode]) {
+			if(visualKeyboard[keyboard[e.keyCode]]) {
+				visualKeyboard[keyboard[e.keyCode]].style.backgroundColor = pressColor;
+				//visualKeyboard[keyboard[e.keyCode]].classList.add('playing'); //adding class only affects keypress and not mouse click
+				visualKeyboard[keyboard[e.keyCode]].style.marginTop = '5px';
+				visualKeyboard[keyboard[e.keyCode]].style.boxShadow = 'none';
+			}
+			var arrPlayNote = keyboard[e.keyCode].split(',');
+			var note = arrPlayNote[0];
+			var octaveModifier = arrPlayNote[1]|0;
+			fnPlayNote(note, __octave + octaveModifier);
+		} else {
+			return false;	
+		}
+	
+	}
+	// Remove key bindings once note is done.
+	var fnRemoveKeyBinding = function(e) {
+	
+		var i = keysPressed.length;
+		while(i--) {
+			if(keysPressed[i]==e.keyCode) {
+				if(visualKeyboard[keyboard[e.keyCode]]) {
+					//visualKeyboard[keyboard[e.keyCode]].classList.remove('playing');
+					visualKeyboard[keyboard[e.keyCode]].style.backgroundColor = '';
+					visualKeyboard[keyboard[e.keyCode]].style.marginTop = '';
+					visualKeyboard[keyboard[e.keyCode]].style.boxShadow = '';
+				}
+				keysPressed.splice(i, 1);
+			}
+		}
+	
+	}
+	// Generates audio for pressed note and returns that to be played
+	var fnPlayNote = function(note, octave) {
+
+		src = __audioSynth.generate(selectSound.value, note, octave, 2);
+		container = new Audio(src);
+		container.addEventListener('ended', function() { container = null; });
+		container.addEventListener('loadeddata', function(e) { e.target.play(); });
+		container.autoplay = false;
+		container.setAttribute('type', 'audio/wav');
+		container.load();
+		return container;
+	
+	};
+
+	//returns correct string for display
+	function getDispStr(n,i,lookup) {
+
+		if(n=='C' && i==-2){
+			return "~";
+		}else if(n=='B' && i==-2){
+			return "-";
+		}else if(n=='A#' && i==0){
+			return ";";
+		}else if(n=='B' && i==0){
+			return "\"";
+		}else if(n=='A' && i==1){
+			return "/";
+		}else if(n=='A#' && i==1){
+			return "<-";
+		}else if(n=='B' && i==1){
+			return "->";
+		}else{
+			return String.fromCharCode(lookup[n + ',' + i]);
+		}
+
+	}
+	window.addEventListener('keydown', fnPlayKeyboard);
+	window.addEventListener('keyup', fnRemoveKeyBinding);
+}
+
+
+
+
+// document.getElementById("C").addEventListener('click', async () => {
+//     await Tone.start();
+// });
+// document.getElementById("Csharp").addEventListener();
+// document.getElementById("D").addEventListener();
+// document.getElementById("Dsharp").addEventListener();
+// document.getElementById("E").addEventListener();
+// document.getElementById("F").addEventListener();
+// document.getElementById("Fsharp").addEventListener();
+// document.getElementById("G").addEventListener();
+// document.getElementById("Gsharp").addEventListener();
+// document.getElementById("A").addEventListener();
+// document.getElementById("Asharp").addEventListener();
+// document.getElementById("B").addEventListener();
 
 // console.log(keyboard.C);
 // function playKeys (key) {
@@ -127,57 +332,97 @@ function defineNCTs (array) {
 }
 
 var chromNCTs = defineNCTs(finalSelection);
+
+////////////// convert to pitches for computer to play back
+function toNoteNames (array) { 
+    let playbackNames = [];
+    for (i = 0; i < 3; i++) {
+        if (array[i] == 1) {
+            playbackNames.push("C4");
+        } else if (array[i] == 2) {
+            playbackNames.push("C#4");
+        } else if (array[i] == 3) {
+            playbackNames.push("D");
+        } else if (array[i] == 4) {
+            playbackNames.push("D#4");
+        } else if (array[i] == 5) {
+            playbackNames.push("E4");
+        } else if (array[i] == 6) {
+            playbackNames.push("F4");
+        } else if (array[i] == 7) {
+            playbackNames.push("F#4");
+        } else if (array[i] == 8) {
+            playbackNames.push("G4");
+        } else if (array[i] == 9) {
+            playbackNames.push("G#4");
+        } else if (array[i] == 10) {
+            playbackNames.push("A4");
+        } else if (array[i] == 11) {
+            playbackNames.push("A#4");
+        } else if (array[i] == 12) {
+            playbackNames.push("B4");
+        } 
+    }
+    return playbackNames;
+}
+
+var chordNoteNames = toNoteNames(finalSelection);
+console.log(chordNoteNames);
 // console.log(chromNCTs);
 
-////////////// COMPUTER PLAYBACK GOES HERE ///////////////////
-////////////// notation display? ///////////////////////
+//////////////////////////////////// COMPUTER PLAYBACK GOES HERE ////////////////////////////////
 
 // var volume = new Tone.Volume(-12).toMaster();
 
 //create a synth and connect it to the main output (your speakers)
-const synth = new Tone.Synth().toDestination();
 
-//play a middle 'C' for the duration of an 8th note
-const now = Tone.now();
-synth.triggerAttackRelease("C4", "8n", now); // insert finalSelection[0], finalSelection[1], finalSelection[2]
-synth.triggerAttackRelease("E4", "8n", now + 0.5);
-synth.triggerAttackRelease("G4", "8n", now + 1);
+function go (array) {
+    let seq = new Tone.Sequence(function(time, idx)) {
+
+    }, array, "4n";
+    Tone.Transport(start('+0.2'));
+    seq.start();
+};
+
+go(finalSelection);
+
 
 /////convert finalSelection to pitches, then play them using tone.js
 
-////////////// PLAYER RESPONSES GO HERE ////////////////////
+////////////////////////////////////////// PLAYER RESPONSES GO HERE ////////////////////////////////////////
     ///// transcribe the pitches of each response
     ///// check that they contain finalSelection - otherwise X
     ///// if so, load triggered pitches loaded into an array
     ///// Make rhythm flexible - but you have a time limit!
 
 
-////////////// COMPARE PITCHES ///////////////////
-var computerChoices = assemble(finalSelection, chromNCTs);
-var playerChoices = assemble(finalSelection, allNCTs);
+/////////////////////////////////////////////// COMPARE PITCHES ///////////////////////////////////////////
+// var computerChoices = assemble(finalSelection, chromNCTs);
+// var playerChoices = assemble(finalSelection, allNCTs);
 
 //   const computer = new Variation(finalSelection, chromNCTs);
 //   const player = new Variation(finalSelection, "allNCTs"); // selections from their 5 turns?
 //  if finalSelection isn't contained within each playerChoice - lose points
-function compareNumberOfPitches() {
-    let duplicates = [];  
-    if (computerChoices.length > playerChoices.length) {
-          console.log('you lose!');
-          return duplicates;
-          // use DOM to place messages on the screen
-      } else if (computerChoices.length < playerChoices.length) {
-            for (let i = 0; i < playerChoices.length; i++) {
-              let value = playerChoices[i];
-              if (playerChoices.indexOf(value) !== -1) {
-                duplicates.push(playerChoices[i]);
-              }
-              return duplicates;
-            }
-          }
-      }
-var duplicates = compareNumberOfPitches(); // do something, connect it to DOM
+
+// function compareNumberOfPitches() {
+//     let duplicates = [];  
+//     if (computerChoices.length > playerChoices.length) {
+//           console.log('you lose!');
+//           return duplicates;
+//           // use DOM to place messages on the screen
+//       } else if (computerChoices.length < playerChoices.length) {
+//             for (let i = 0; i < playerChoices.length; i++) {
+//               let value = playerChoices[i];
+//               if (playerChoices.indexOf(value) !== -1) {
+//                 duplicates.push(playerChoices[i]);
+//               }
+//               return duplicates;
+//             }
+//           }
+//       }
+// var duplicates = compareNumberOfPitches(); // do something, connect it to DOM
       
-      // a way to keep track of a player score (From drum machine)
+// a way to keep track of a player score (From drum machine)
 updatePlayerScore = (score, difficulty, remainingTime) => { // replace "difficulty" with a different parameter
     const roundScore = (score * difficulty);
     const timeBonus = Math.round(remainingTime * 10);

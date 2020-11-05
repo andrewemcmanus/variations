@@ -1,3 +1,4 @@
+const { toNamespacedPath } = require("path");
 
 const keyboard = { // unicode numbers for a one-octave scale
     C: 65,    // a
@@ -18,11 +19,8 @@ const keyboard = { // unicode numbers for a one-octave scale
 };
 
 // console.log(keyboard.C);
-
 // function playKeys (key) {
-    
 // }
-
 // const synth = new Tone.Synth().toDestination();
 // const now = Tone.now()
 // // trigger the attack immediately
@@ -131,23 +129,43 @@ function defineNCTs (array) {
 var chromNCTs = defineNCTs(finalSelection);
 // console.log(chromNCTs);
 
-function assemble(array1, array2) {
-    const output = array1.concat(array2);
-    return output;
-}
+////////////// COMPUTER PLAYBACK GOES HERE ///////////////////
+////////////// notation display? ///////////////////////
 
+// var volume = new Tone.Volume(-12).toMaster();
+
+//create a synth and connect it to the main output (your speakers)
+const synth = new Tone.Synth().toDestination();
+
+//play a middle 'C' for the duration of an 8th note
+const now = Tone.now();
+synth.triggerAttackRelease("C4", "8n", now); // insert finalSelection[0], finalSelection[1], finalSelection[2]
+synth.triggerAttackRelease("E4", "8n", now + 0.5);
+synth.triggerAttackRelease("G4", "8n", now + 1);
+
+/////convert finalSelection to pitches, then play them using tone.js
+
+////////////// PLAYER RESPONSES GO HERE ////////////////////
+    ///// transcribe the pitches of each response
+    ///// check that they contain finalSelection - otherwise X
+    ///// if so, load triggered pitches loaded into an array
+    ///// Make rhythm flexible - but you have a time limit!
+
+
+////////////// COMPARE PITCHES ///////////////////
 var computerChoices = assemble(finalSelection, chromNCTs);
 var playerChoices = assemble(finalSelection, allNCTs);
 
 //   const computer = new Variation(finalSelection, chromNCTs);
 //   const player = new Variation(finalSelection, "allNCTs"); // selections from their 5 turns?
-  
+//  if finalSelection isn't contained within each playerChoice - lose points
 function compareNumberOfPitches() {
-      if (computerChoices.length > playerChoices.length) {
+    let duplicates = [];  
+    if (computerChoices.length > playerChoices.length) {
           console.log('you lose!');
+          return duplicates;
           // use DOM to place messages on the screen
       } else if (computerChoices.length < playerChoices.length) {
-            let duplicates = [];
             for (let i = 0; i < playerChoices.length; i++) {
               let value = playerChoices[i];
               if (playerChoices.indexOf(value) !== -1) {
@@ -157,33 +175,48 @@ function compareNumberOfPitches() {
             }
           }
       }
-
-var duplicates = compareNumberOfPitches();
-
-function adjustScore() {
-    var score;
-    if (duplicates = 0) {
-        return score;
-    } else {
-        for (i = 0; i < duplicates.length; i++) {
-            var score = score - 1;
-            return score;
-        }
-    }
-}
-
+var duplicates = compareNumberOfPitches(); // do something, connect it to DOM
       
+      // a way to keep track of a player score (From drum machine)
+updatePlayerScore = (score, difficulty, remainingTime) => { // replace "difficulty" with a different parameter
+    const roundScore = (score * difficulty);
+    const timeBonus = Math.round(remainingTime * 10);
+    playerScore = playerScore + (roundScore + timeBonus);
+    showScoreBoard(roundScore, timeBonus, playerScore, remainingTime); 
+    document.getElementById('score-span').innerText = `Score: ${playerScore}`;
+      }
+      
+showScoreBoard = (roundSc, timeBo, playerSc, remainingTime) => {
+    let scoreBoard = document.getElementById('score-board');
+    let boardTitle = document.getElementById('board-title');
+    let boardRoundScore = document.getElementById('board-round-score');
+    let boardTimeBonus = document.getElementById('board-time-bonus');
+    let boardTotalScore = document.getElementById('board-total-score');
+    const titleText = (remainingTime) ? "Round Passed!" : "Time's up!";
+    boardTitle.innerText = titleText;
+    boardRoundScore.innerText = roundSc;
+    boardTimeBonus.innerText = timeBo;
+    boardTotalScore.innerText = playerSc;
+    scoreBoard.style.display = 'flex';
+    setTimeout(() => {
+      scoreBoard.style.display = 'none';
+        }, 4000);
+      }
 
 
+// function adjustScore() {
+//     var score;
+//     if (duplicates = 0) {
+//         return score;
+//     } else {
+//         for (i = 0; i < duplicates.length; i++) {
+//             var score = score - 1;
+//             return score;
+//         }
+//     }
+// }
 
-// attach the numbers in these arrays to...collision functions from the game template?
-// remind the player of which pitches they've used
 
-// Player must provide at least 5 responses? (otherwise it's too easy)
-// can repeat chord tones but NOT NCTs?
-
-
-////////////////// GENERATE (computer) RHYTHM: /////////////////////
 
 // Tone.js abstracts away the AudioContext time. 
 // Instead of defining all values in seconds, any method which takes time as an argument can accept a number or a string. 
@@ -199,13 +232,9 @@ function adjustScore() {
 
 // next step: play selection
 
-
-
 ///////////////////// HOW TO COMPARE EACH LISTENER VARIATION TO MAKE SURE THAT THEY'RE DIFFERENT /////////////////
 // Since each variation should be different, the player should limit the overlap of the 9 NCTs among variations
 // subtract the number of *repeated* NCTs from the total
-// leave rhythmic variation up to the player?
-// load the NCTs used by the player into an array and check for repetitions
 
 
 

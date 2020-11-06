@@ -23,7 +23,7 @@ function playKeyboard(){
 
 	var __audioSynth = new AudioSynth();
 	__audioSynth.setVolume(0.5);
-	var __octave = 4; //sets position of middle C, normally the 4th octave
+	var __octave = 4; //sets position of middle C, normally the 4th octave   ///// NOTE DEFINITIONS NEED TO BE SOMEHOW CONNECTED HERE
 	
 	// var reverseLookupText = {};
 	// var reverseLookup = {};
@@ -79,40 +79,40 @@ function playKeyboard(){
 	var iWhite = 0;
 	var notes = __audioSynth._notes; //C, C#, D....A#, B
 
-	// for(var i=-2;i<=1;i++) {
-	// 	for(var n in notes) {
-	// 		if(n[2]!='b') {
-	// 			var thisKey = document.createElement('div');
-	// 			if(n.length>1) { //adding sharp sign makes 2 characters
-	// 				thisKey.className = 'black key'; //2 classes
-	// 				thisKey.style.width = '30px';
-	// 				thisKey.style.height = '120px';
-	// 				thisKey.style.left = (40 * (iWhite - 1)) + 25 + 'px';
-	// 			} else {
-	// 				thisKey.className = 'white key';
-	// 				thisKey.style.width = '40px';
-	// 				thisKey.style.height = '200px';
-	// 				thisKey.style.left = 40 * iWhite + 'px';
-	// 				iWhite++;
-	// 			}
+	for(var i=-2;i<=1;i++) {
+		for(var n in notes) {
+			if(n[2]!='b') {
+				var thisKey = document.createElement('div');
+				if(n.length>1) { //adding sharp sign makes 2 characters
+					thisKey.className = 'black key'; //2 classes
+					thisKey.style.width = '30px';
+					thisKey.style.height = '120px';
+					thisKey.style.left = (40 * (iWhite - 1)) + 25 + 'px';
+				} else {
+					thisKey.className = 'white key';
+					thisKey.style.width = '40px';
+					thisKey.style.height = '200px';
+					thisKey.style.left = 40 * iWhite + 'px';
+					iWhite++;
+				}
 
-	// 			var label = document.createElement('div');
-	// 			label.className = 'label';
+				var label = document.createElement('div');
+				label.className = 'label';
 
-	// 			let s = getDispStr(n,i,reverseLookupText);
+				let s = getDispStr(n,i,reverseLookupText);
 
-	// 			label.innerHTML = '<b class="keyLabel">' + s + '</b>' + '<br /><br />' + n.substr(0,1) +
-	// 				'<span name="OCTAVE_LABEL" value="' + i + '">' + (__octave + parseInt(i)) + '</span>' + (n.substr(1,1)?n.substr(1,1):'');
-	// 			thisKey.appendChild(label);
-	// 			thisKey.setAttribute('ID', 'KEY_' + n + ',' + i);
-	// 			thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[n + ',' + i]));
-	// 			visualKeyboard[n + ',' + i] = thisKey;
-	// 			visualKeyboard.appendChild(thisKey);
+				label.innerHTML = '<b class="keyLabel">' + s + '</b>' + '<br /><br />' + n.substr(0,1) +
+					'<span name="OCTAVE_LABEL" value="' + i + '">' + (__octave + parseInt(i)) + '</span>' + (n.substr(1,1)?n.substr(1,1):'');
+				thisKey.appendChild(label);
+				thisKey.setAttribute('ID', 'KEY_' + n + ',' + i);
+				thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[n + ',' + i]));
+				visualKeyboard[n + ',' + i] = thisKey;
+				visualKeyboard.appendChild(thisKey);
 				
-	// 			iKeys++;
-	// 		}
-	// 	}
-	// }
+				iKeys++;
+			}
+		}
+	}
 
 	visualKeyboard.style.width = iWhite * 40 + 'px';
 
@@ -341,7 +341,7 @@ function defineNCTs (array) {
 
 var chromNCTs = defineNCTs(finalSelection);
 
-////////////// convert to pitches for computer to play back
+////////////// convert to pitches for computer to play back ////////////////////
 function toNoteNames (array) { 
     let playbackNames = [];
     for (i = 0; i < 3; i++) {
@@ -384,15 +384,15 @@ console.log(chordNoteNames);
 
 //create a synth and connect it to the main output (your speakers)
 
-// function go (array) {
-//     let seq = new Tone.Sequence(function(time, idx)) {
+function go (array) {
+    let seq = new Tone.Sequence(function(time, idx)) {
 
-//     }, array, "4n";
-//     Tone.Transport(start('+0.2'));
-//     seq.start();
-// };
+    }, array, "4n";
+    Tone.Transport(start('+0.2'));
+    seq.start();
+};
 
-// go(finalSelection);
+go(finalSelection);
 
 
 /////convert finalSelection to pitches, then play them using tone.js

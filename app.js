@@ -1,4 +1,3 @@
-// const { toNamespacedPath } = require("path");
 
 const keyboard = { // unicode numbers for a one-octave scale
     65: "C4",    // a
@@ -26,47 +25,46 @@ function playKeyboard(){
 	__audioSynth.setVolume(0.5);
 	var __octave = 4; //sets position of middle C, normally the 4th octave
 	
-	
-	var reverseLookupText = {};
-	var reverseLookup = {};
+	// var reverseLookupText = {};
+	// var reverseLookup = {};
 
 	// Create a reverse lookup table.
-	for(var i in keyboard) {
+	// for(var i in keyboard) {
 	
-		var val;
+	// 	var val;
 
-		switch(i|0) { //some characters don't display like they are supposed to, so need correct values
+	// 	switch(i|0) { //some characters don't display like they are supposed to, so need correct values
 		
-			case 187: //equal sign
-				val = 61; //???
-				break;
+	// 		case 187: //equal sign
+	// 			val = 61; //???
+	// 			break;
 			
-			case 219: //open bracket
-				val = 91; //left window key
-				break;
+	// 		case 219: //open bracket
+	// 			val = 91; //left window key
+	// 			break;
 			
-			case 221: //close bracket
-				val = 93; //select key
-				break;
+	// 		case 221: //close bracket
+	// 			val = 93; //select key
+	// 			break;
 			
-			case 188://comma
-				val = 44; //print screen
-				break;
-			//the fraction 3/4 is displayed for some reason if 190 wasn't replaced by 46; it's still the period key either way
-			case 190: //period
-				val = 46; //delete
-				break;
+	// 		case 188://comma
+	// 			val = 44; //print screen
+	// 			break;
+	// 		//the fraction 3/4 is displayed for some reason if 190 wasn't replaced by 46; it's still the period key either way
+	// 		case 190: //period
+	// 			val = 46; //delete
+	// 			break;
 			
-			default:
-				val = i;
-				break;
+	// 		default:
+	// 			val = i;
+	// 			break;
 			
-		}
+	// 	}
 	
-		reverseLookupText[keyboard[i]] = val;
-		reverseLookup[keyboard[i]] = i;
+	// 	reverseLookupText[keyboard[i]] = val;
+	// 	reverseLookup[keyboard[i]] = i;
 	
-	}
+	// }
 
 	// Keys you have pressed down.
 	var keysPressed = [];
@@ -81,40 +79,40 @@ function playKeyboard(){
 	var iWhite = 0;
 	var notes = __audioSynth._notes; //C, C#, D....A#, B
 
-	for(var i=-2;i<=1;i++) {
-		for(var n in notes) {
-			if(n[2]!='b') {
-				var thisKey = document.createElement('div');
-				if(n.length>1) { //adding sharp sign makes 2 characters
-					thisKey.className = 'black key'; //2 classes
-					thisKey.style.width = '30px';
-					thisKey.style.height = '120px';
-					thisKey.style.left = (40 * (iWhite - 1)) + 25 + 'px';
-				} else {
-					thisKey.className = 'white key';
-					thisKey.style.width = '40px';
-					thisKey.style.height = '200px';
-					thisKey.style.left = 40 * iWhite + 'px';
-					iWhite++;
-				}
+	// for(var i=-2;i<=1;i++) {
+	// 	for(var n in notes) {
+	// 		if(n[2]!='b') {
+	// 			var thisKey = document.createElement('div');
+	// 			if(n.length>1) { //adding sharp sign makes 2 characters
+	// 				thisKey.className = 'black key'; //2 classes
+	// 				thisKey.style.width = '30px';
+	// 				thisKey.style.height = '120px';
+	// 				thisKey.style.left = (40 * (iWhite - 1)) + 25 + 'px';
+	// 			} else {
+	// 				thisKey.className = 'white key';
+	// 				thisKey.style.width = '40px';
+	// 				thisKey.style.height = '200px';
+	// 				thisKey.style.left = 40 * iWhite + 'px';
+	// 				iWhite++;
+	// 			}
 
-				var label = document.createElement('div');
-				label.className = 'label';
+	// 			var label = document.createElement('div');
+	// 			label.className = 'label';
 
-				let s = getDispStr(n,i,reverseLookupText);
+	// 			let s = getDispStr(n,i,reverseLookupText);
 
-				label.innerHTML = '<b class="keyLabel">' + s + '</b>' + '<br /><br />' + n.substr(0,1) +
-					'<span name="OCTAVE_LABEL" value="' + i + '">' + (__octave + parseInt(i)) + '</span>' + (n.substr(1,1)?n.substr(1,1):'');
-				thisKey.appendChild(label);
-				thisKey.setAttribute('ID', 'KEY_' + n + ',' + i);
-				thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[n + ',' + i]));
-				visualKeyboard[n + ',' + i] = thisKey;
-				visualKeyboard.appendChild(thisKey);
+	// 			label.innerHTML = '<b class="keyLabel">' + s + '</b>' + '<br /><br />' + n.substr(0,1) +
+	// 				'<span name="OCTAVE_LABEL" value="' + i + '">' + (__octave + parseInt(i)) + '</span>' + (n.substr(1,1)?n.substr(1,1):'');
+	// 			thisKey.appendChild(label);
+	// 			thisKey.setAttribute('ID', 'KEY_' + n + ',' + i);
+	// 			thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[n + ',' + i]));
+	// 			visualKeyboard[n + ',' + i] = thisKey;
+	// 			visualKeyboard.appendChild(thisKey);
 				
-				iKeys++;
-			}
-		}
-	}
+	// 			iKeys++;
+	// 		}
+	// 	}
+	// }
 
 	visualKeyboard.style.width = iWhite * 40 + 'px';
 
@@ -163,7 +161,6 @@ function playKeyboard(){
 				keysPressed.splice(i, 1);
 			}
 		}
-	
 	}
 	// Generates audio for pressed note and returns that to be played
 	var fnPlayNote = function(note, octave) {
@@ -180,32 +177,43 @@ function playKeyboard(){
 	};
 
 	//returns correct string for display
-	function getDispStr(n,i,lookup) {
+	// function getDispStr(n,i,lookup) {
 
-		if(n=='C' && i==-2){
-			return "~";
-		}else if(n=='B' && i==-2){
-			return "-";
-		}else if(n=='A#' && i==0){
-			return ";";
-		}else if(n=='B' && i==0){
-			return "\"";
-		}else if(n=='A' && i==1){
-			return "/";
-		}else if(n=='A#' && i==1){
-			return "<-";
-		}else if(n=='B' && i==1){
-			return "->";
-		}else{
-			return String.fromCharCode(lookup[n + ',' + i]);
-		}
+	// 	if(n=='C' && i==-2){
+	// 		return "~";
+	// 	}else if(n=='B' && i==-2){
+	// 		return "-";
+	// 	}else if(n=='A#' && i==0){
+	// 		return ";";
+	// 	}else if(n=='B' && i==0){
+	// 		return "\"";
+	// 	}else if(n=='A' && i==1){
+	// 		return "/";
+	// 	}else if(n=='A#' && i==1){
+	// 		return "<-";
+	// 	}else if(n=='B' && i==1){
+	// 		return "->";
+	// 	}else{
+	// 		return String.fromCharCode(lookup[n + ',' + i]);
+	// 	}
 
-	}
+	// }
 	window.addEventListener('keydown', fnPlayKeyboard);
 	window.addEventListener('keyup', fnRemoveKeyBinding);
 }
-
-
+// Existing code unchanged.
+window.onload = function() {
+    var context = new AudioContext();
+    // Setup all nodes
+    ...
+  }
+  
+  // One-liner to resume playback when user interacted with the page.
+  document.querySelector('button').addEventListener('click', function() {
+    context.resume().then(() => {
+      console.log('Playback resumed successfully');
+    });
+  });
 
 
 // document.getElementById("C").addEventListener('click', async () => {
@@ -376,15 +384,15 @@ console.log(chordNoteNames);
 
 //create a synth and connect it to the main output (your speakers)
 
-function go (array) {
-    let seq = new Tone.Sequence(function(time, idx)) {
+// function go (array) {
+//     let seq = new Tone.Sequence(function(time, idx)) {
 
-    }, array, "4n";
-    Tone.Transport(start('+0.2'));
-    seq.start();
-};
+//     }, array, "4n";
+//     Tone.Transport(start('+0.2'));
+//     seq.start();
+// };
 
-go(finalSelection);
+// go(finalSelection);
 
 
 /////convert finalSelection to pitches, then play them using tone.js

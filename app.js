@@ -1,21 +1,5 @@
 
-const keyboard = { // unicode numbers for a one-octave scale
-    65: "C4",    // a
-    87: "C#4",   // w
-    83: "D4",    // s
-    69: "D#4",   // e
-    68: "E4",    // d
-    70: "F4",    // f
-    84: "F#4",   // t
-    71: "G4",    // g
-    89: "G#4",   // y
-    72: "A4",    // h
-    85: "A#4",   // u
-    74: "B4"     // j
-    // the numbers from this object need to be played AND notated by the computer (?)
-    // The computer "plays each unicode key", while the player uses event listeners
-    // What does the event listener refer to, and what does the output have to be??
-};
+
 // Tone.Synth is a basic synthesizer with a single oscillator
 const synth = new Tone.Synth();
 // Set the tone to sine
@@ -89,8 +73,7 @@ document.addEventListener("keyup", e => {
 window.onload = function() {
     var context = new AudioContext();
     // Setup all nodes
-    ...
-  }
+  };
   
   // One-liner to resume playback when user interacted with the page.
   document.querySelector('button').addEventListener('click', function() {
@@ -99,49 +82,6 @@ window.onload = function() {
     });
   });
 
-
-// document.getElementById("C").addEventListener('click', async () => {
-//     await Tone.start();
-// });
-// document.getElementById("Csharp").addEventListener();
-// document.getElementById("D").addEventListener();
-// document.getElementById("Dsharp").addEventListener();
-// document.getElementById("E").addEventListener();
-// document.getElementById("F").addEventListener();
-// document.getElementById("Fsharp").addEventListener();
-// document.getElementById("G").addEventListener();
-// document.getElementById("Gsharp").addEventListener();
-// document.getElementById("A").addEventListener();
-// document.getElementById("Asharp").addEventListener();
-// document.getElementById("B").addEventListener();
-
-// console.log(keyboard.C);
-// function playKeys (key) {
-// }
-// const synth = new Tone.Synth().toDestination();
-// const now = Tone.now()
-// // trigger the attack immediately
-// synth.triggerAttack("C4", now)
-// // wait one second before triggering the release
-// synth.triggerRelease(now + 1)
-
-// document.getElementById('C').addEventListener('click', playKeys(keyboard.C));
-// tone.js here: see video
-// var p1 = new Tone.players({
-//     // key value assignments go here... attach "C" to a link, each key after that?
-// }, function() {
-
-// });
-
-// function go() {
-//     // p1.get('hihat').start;
-//     Tone.Transport.bpm.value = 120;
-//     var seq = new Tone.Sequence(function(time, idx)
-// {
-//     eval.(editor.getValue());
-
-// }, [], "4n");
-// }
 
 // final Selection: connect to event listeners
 
@@ -266,26 +206,26 @@ console.log(chordNoteNames);
 
 // var volume = new Tone.Volume(-12).toMaster();
 
-//create a synth and connect it to the main output (your speakers)
+//create a synth and connect it to the main output (your speakers) - or just use the synth above?
 
-function go (array) {
-    let seq = new Tone.Sequence(function(time, idx)) {
+// function go (array) {
+//     let seq = new Tone.Sequence(function(time, idx)) {
 
-    }, array, "4n";
-    Tone.Transport(start('+0.2'));
-    seq.start();
-};
+//     }, array, "4n";
+//     Tone.Transport(start('+0.2'));
+//     seq.start();
+// };
 
-go(finalSelection);
+// go(finalSelection);
 
 
 /////convert finalSelection to pitches, then play them using tone.js
 
 ////////////////////////////////////////// PLAYER RESPONSES GO HERE ////////////////////////////////////////
     ///// transcribe the pitches of each response
-    ///// check that they contain finalSelection - otherwise X
+    ///// check that they contain all 3 pitches of finalSelection - otherwise X
     ///// if so, load triggered pitches loaded into an array
-	///// Make rhythm flexible - but you have a time limit!
+	///// Make rhythm flexible - but you have a very short time limit!
 	
 	// eventlisteners for each pitch (querySelector for each note) transcribe a number? Load this into playerChoices array?
 

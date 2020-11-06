@@ -1,37 +1,50 @@
 /* How to make keyboard fit together? Fit into Foundation?? */
-html {
-    box-sizing: border-box;
-  }
-  *, *:before, *:after {
-    box-sizing: inherit;
-  }
-
-body { font-family: Georgia; text-align: center;}
-
-.key { position: absolute; font-family: Helvetica; font-weight: 100; font-size: 12px;
-      border: 1px solid rgba(32,32,32,0.2);
-      border-radius: 0px 0px 5px 5px;
-      cursor:pointer;
-      box-shadow: 0px 5px 1px rgba(32,32,32,0.2);
-      -webkit-transition: margin 0.05s ease, background-color 0.05s ease, box-shadow 0.05s ease; }
-
-.key:hover { background-color: #71DB90; }
-      
-.key .label { position: absolute; bottom: 15px; text-align: center; left: 0px; right: 0px; }
-
-.keyLabel {font-weight: 900; text-shadow: 0px -1px 5px #EBF508; font-size: 15px;}
-
-.black { background-color: rgb(32,32,32); color: #ffffff; z-index: 1; text-shadow: 0px -1px 1px #FF0000; }
-  
-.white { background-color: #F2F2DE; color: #3008F5; z-index: 0; text-shadow: 0px 1px 1px #08E8F5; }
-  
-.keyboard-holder { margin: 30px auto; height: 200px; position:relative; user-select:none; -webkit-user-select:none;-moz-user-select:none;-o-user-select:none; max-width: 1200px; width: 100%;}
-.keyLabel {font-weight: 900; text-shadow: 0px -1px 5px #EBF508; font-size: 15px;}
-
-.black { background-color: rgb(32,32,32); color: #ffffff; z-index: 1; text-shadow: 0px -1px 1px #FF0000; }
-  
-.white { background-color: #F2F2DE; color: #3008F5; z-index: 0; text-shadow: 0px 1px 1px #08E8F5; }
-  
-.keyboard-holder { margin: 30px auto; height: 200px; position:relative; user-select:none; -webkit-user-select:none;-moz-user-select:none;-o-user-select:none; }
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
+ body {
+     font-family: 'Roboto', sans-serif;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     min-height: 100vh;
+}
+ ul {
+     list-style: none;
+     display: flex;
+}
+ ul .key {
+     position: relative;
+     width: 60px;
+     height: 180px;
+     border: 1px solid black;
+     border-right: none;
+     background: #fffff0;
+     border-radius: 5px;
+     box-shadow: 0px 3px 5px #666;
+     cursor: pointer;
+     display: flex;
+     justify-content: center;
+     align-items: flex-end;
+     padding-bottom: 10px;
+     font-weight: bold;
+}
+ ul .key:last-child {
+     border-right: 1px solid black;
+}
+ ul .black-key {
+     position: absolute;
+     top: -1px;
+     left: 37.5px;
+     width: 45px;
+     height: 120px;
+     background: black;
+     border-radius: 5px;
+     box-shadow: 0px 3px 5px #666;
+     z-index: 999;
+     display: flex;
+     justify-content: center;
+     align-items: flex-end;
+     padding-bottom: 10px;
+     color: white;
+}
 
   /*.playing {background-color: #1BC0EA;}*/

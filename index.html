@@ -6,92 +6,34 @@
     <title>variation improv battle</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div id="keyboard" class="keyboard-holder" style="width: 1120px;">
-        <div class="white key" id="C" style="width: 40px; height: 200px; left: 0px;">
-            <div class="label">
-                <b class="keyLabel">~</b>
-                <br>
-                <br>C<span name="OCTAVE_LABEL" value="-2">2</span>
-            </div>
-            </div>
-            <div class="black key" id="Csharp" style="width: 30px; height: 120px; left: 25px;">
-                <div class="label">
-                    <b class="keyLabel">1</b>
-                    <br>
-                    <br>C<span name="OCTAVE_LABEL" value="-2">2</span>#
-                </div>
-            </div>
-            <div class="white key" id="D" style="width: 40px; height: 200px; left: 40px;">
-                <div class="label">
-                    <b class="keyLabel">2</b>
-                    <br>
-                    <br>D<span name="OCTAVE_LABEL" value="-2">2</span>
-                </div>
-            </div>
-            <div class="black key" id="Dsharp" style="width: 30px; height: 120px; left: 65px;">
-                <div class="label">
-                    <b class="keyLabel">3</b>
-                    <br>
-                    <br>D<span name="OCTAVE_LABEL" value="-2">2</span>#
-                </div>
-            </div>
-            <div class="white key" id="E" style="width: 40px; height: 200px; left: 80px;">
-                <div class="label">
-                    <b class="keyLabel">4</b>
-                    <br>
-                    <br>E<span name="OCTAVE_LABEL" value="-2">2</span>
-                </div>
-            </div>
-            <div class="white key" id="F" style="width: 40px; height: 200px; left: 120px;">
-                <div class="label">
-                    <b class="keyLabel">5</b>
-                    <br>
-                    <br>F<span name="OCTAVE_LABEL" value="-2">2</span>
-                </div>
-            </div>
-            <div class="black key" id="Fsharp" style="width: 30px; height: 120px; left: 145px;">
-                <div class="label">
-                    <b class="keyLabel">6</b>
-                    <br>
-                    <br>F<span name="OCTAVE_LABEL" value="-2">2</span>#
-                </div>
-            </div>
-            <div class="white key" id="G" style="width: 40px; height: 200px; left: 160px;">
-                <div class="label">
-                    <b class="keyLabel">7</b>
-                    <br>
-                    <br>G<span name="OCTAVE_LABEL" value="-2">2</span>
-                </div>
-            </div>
-            <div class="black key" id="Gsharp" style="width: 30px; height: 120px; left: 185px;">
-                <div class="label"><b class="keyLabel">8</b>
-                    <br>
-                    <br>G<span name="OCTAVE_LABEL" value="-2">2</span>#
-                </div>
-            </div>
-            <div class="white key" id="A" style="width: 40px; height: 200px; left: 200px;">
-                <div class="label">
-                    <b class="keyLabel">9</b>
-                    <br>
-                    <br>A<span name="OCTAVE_LABEL" value="-2">2</span>
-                </div>
-            </div>
-            <div class="black key" id="Asharp" style="width: 30px; height: 120px; left: 225px;">
-                <div class="label">
-                    <b class="keyLabel">0</b>
-                    <br>
-                    <br>A<span name="OCTAVE_LABEL" value="-2">2</span>#
-                </div>
-            </div>
-            <div class="white key" id="B" style="width: 40px; height: 200px; left: 240px;">
-                <div class="label">
-                    <b class="keyLabel">-</b>
-                    <br>
-                    <br>B<span name="OCTAVE_LABEL" value="-2">2</span>
-                </div>
-            </div>
-        </div>
+<ul id="piano">
+    <li data-note="C4" class="key">
+      <div data-note="C#4" class="black-key">R</div>
+      D
+    </li>
+    <li data-note="D4" class="key">
+      <div data-note="D#4" class="black-key">T</div>
+      F
+    </li>
+    <li data-note="E4" class="key">
+      G
+    </li>
+    <li data-note="F4" class="key">
+      <div data-note="F#4" class="black-key">U</div>
+      H
+    </li>
+    <li data-note="G4" class="key">
+      <div data-note="G#4" class="black-key">I</div>
+      J
+    </li>
+    <li data-note="A4" class="key">
+      <div data-note="A#4" class="black-key">O</div>
+      K
+    </li>
+    <li data-note="B4" class="key">
+      L
+    </li>
+  </ul>
 
     <!-- <div class="keyboard">
         <div class="note" id="C"></div>            

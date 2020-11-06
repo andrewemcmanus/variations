@@ -16,191 +16,75 @@ const keyboard = { // unicode numbers for a one-octave scale
     // The computer "plays each unicode key", while the player uses event listeners
     // What does the event listener refer to, and what does the output have to be??
 };
+// Tone.Synth is a basic synthesizer with a single oscillator
+const synth = new Tone.Synth();
+// Set the tone to sine
+synth.oscillator.type = "sine";
+// connect it to the master output (your speakers)
+synth.toMaster();
 
-function playKeyboard(){
+const piano = document.getElementById("piano");
 
-	let pressColor = '#1BC0EA'; //color when key is pressed
+piano.addEventListener("mousedown", e => {
+  // fires off a note continously until trigger is released
+  synth.triggerAttack(e.target.dataset.note);
+});
 
-	var __audioSynth = new AudioSynth();
-	__audioSynth.setVolume(0.5);
-	var __octave = 4; //sets position of middle C, normally the 4th octave   ///// NOTE DEFINITIONS NEED TO BE SOMEHOW CONNECTED HERE
-	
-	// var reverseLookupText = {};
-	// var reverseLookup = {};
+piano.addEventListener("mouseup", e => {
+  // stops the trigger
+  synth.triggerRelease();
+});
 
-	// Create a reverse lookup table.
-	// for(var i in keyboard) {
-	
-	// 	var val;
-
-	// 	switch(i|0) { //some characters don't display like they are supposed to, so need correct values
-		
-	// 		case 187: //equal sign
-	// 			val = 61; //???
-	// 			break;
-			
-	// 		case 219: //open bracket
-	// 			val = 91; //left window key
-	// 			break;
-			
-	// 		case 221: //close bracket
-	// 			val = 93; //select key
-	// 			break;
-			
-	// 		case 188://comma
-	// 			val = 44; //print screen
-	// 			break;
-	// 		//the fraction 3/4 is displayed for some reason if 190 wasn't replaced by 46; it's still the period key either way
-	// 		case 190: //period
-	// 			val = 46; //delete
-	// 			break;
-			
-	// 		default:
-	// 			val = i;
-	// 			break;
-			
-	// 	}
-	
-	// 	reverseLookupText[keyboard[i]] = val;
-	// 	reverseLookup[keyboard[i]] = i;
-	
-	// }
-
-	// Keys you have pressed down.
-	var keysPressed = [];
-
-	// Generate keyboard
-	let visualKeyboard = document.getElementById('keyboard');
-	let selectSound = {
-		value: "0" //piano
-	};
-
-	var iKeys = 0;
-	var iWhite = 0;
-	var notes = __audioSynth._notes; //C, C#, D....A#, B
-
-	for(var i=-2;i<=1;i++) {
-		for(var n in notes) {
-			if(n[2]!='b') {
-				var thisKey = document.createElement('div');
-				if(n.length>1) { //adding sharp sign makes 2 characters
-					thisKey.className = 'black key'; //2 classes
-					thisKey.style.width = '30px';
-					thisKey.style.height = '120px';
-					thisKey.style.left = (40 * (iWhite - 1)) + 25 + 'px';
-				} else {
-					thisKey.className = 'white key';
-					thisKey.style.width = '40px';
-					thisKey.style.height = '200px';
-					thisKey.style.left = 40 * iWhite + 'px';
-					iWhite++;
-				}
-
-				var label = document.createElement('div');
-				label.className = 'label';
-
-				let s = getDispStr(n,i,reverseLookupText);
-
-				label.innerHTML = '<b class="keyLabel">' + s + '</b>' + '<br /><br />' + n.substr(0,1) +
-					'<span name="OCTAVE_LABEL" value="' + i + '">' + (__octave + parseInt(i)) + '</span>' + (n.substr(1,1)?n.substr(1,1):'');
-				thisKey.appendChild(label);
-				thisKey.setAttribute('ID', 'KEY_' + n + ',' + i);
-				thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[n + ',' + i]));
-				visualKeyboard[n + ',' + i] = thisKey;
-				visualKeyboard.appendChild(thisKey);
-				
-				iKeys++;
-			}
-		}
-	}
-
-	visualKeyboard.style.width = iWhite * 40 + 'px';
-
-	window.addEventListener(evtListener[1], function() { n = keysPressed.length; while(n--) { fnRemoveKeyBinding({keyCode:keysPressed[n]}); } });
-	
-// Detect keypresses, play notes.
-
-	var fnPlayKeyboard = function(e) {
-	
-		var i = keysPressed.length;
-		while(i--) {
-			if(keysPressed[i]==e.keyCode) {
-				return false;	
-			}
-		}
-		keysPressed.push(e.keyCode);
-
-		if(keyboard[e.keyCode]) {
-			if(visualKeyboard[keyboard[e.keyCode]]) {
-				visualKeyboard[keyboard[e.keyCode]].style.backgroundColor = pressColor;
-				//visualKeyboard[keyboard[e.keyCode]].classList.add('playing'); //adding class only affects keypress and not mouse click
-				visualKeyboard[keyboard[e.keyCode]].style.marginTop = '5px';
-				visualKeyboard[keyboard[e.keyCode]].style.boxShadow = 'none';
-			}
-			var arrPlayNote = keyboard[e.keyCode].split(',');
-			var note = arrPlayNote[0];
-			var octaveModifier = arrPlayNote[1]|0;
-			fnPlayNote(note, __octave + octaveModifier);
-		} else {
-			return false;	
-		}
-	
-	}
-	// Remove key bindings once note is done.
-	var fnRemoveKeyBinding = function(e) {
-	
-		var i = keysPressed.length;
-		while(i--) {
-			if(keysPressed[i]==e.keyCode) {
-				if(visualKeyboard[keyboard[e.keyCode]]) {
-					//visualKeyboard[keyboard[e.keyCode]].classList.remove('playing');
-					visualKeyboard[keyboard[e.keyCode]].style.backgroundColor = '';
-					visualKeyboard[keyboard[e.keyCode]].style.marginTop = '';
-					visualKeyboard[keyboard[e.keyCode]].style.boxShadow = '';
-				}
-				keysPressed.splice(i, 1);
-			}
-		}
-	}
-	// Generates audio for pressed note and returns that to be played
-	var fnPlayNote = function(note, octave) {
-
-		src = __audioSynth.generate(selectSound.value, note, octave, 2);
-		container = new Audio(src);
-		container.addEventListener('ended', function() { container = null; });
-		container.addEventListener('loadeddata', function(e) { e.target.play(); });
-		container.autoplay = false;
-		container.setAttribute('type', 'audio/wav');
-		container.load();
-		return container;
-	
-	};
-
-	//returns correct string for display
-	// function getDispStr(n,i,lookup) {
-
-	// 	if(n=='C' && i==-2){
-	// 		return "~";
-	// 	}else if(n=='B' && i==-2){
-	// 		return "-";
-	// 	}else if(n=='A#' && i==0){
-	// 		return ";";
-	// 	}else if(n=='B' && i==0){
-	// 		return "\"";
-	// 	}else if(n=='A' && i==1){
-	// 		return "/";
-	// 	}else if(n=='A#' && i==1){
-	// 		return "<-";
-	// 	}else if(n=='B' && i==1){
-	// 		return "->";
-	// 	}else{
-	// 		return String.fromCharCode(lookup[n + ',' + i]);
-	// 	}
-
-	// }
-	window.addEventListener('keydown', fnPlayKeyboard);
-	window.addEventListener('keyup', fnRemoveKeyBinding);
-}
+// handles keyboard events
+document.addEventListener("keydown", e => {
+  // e object has the key property to tell which key was pressed
+  switch (e.key) {
+    case "d":
+      return synth.triggerAttack("C4");
+    case "r":
+      return synth.triggerAttack("C#4");
+    case "f":
+      return synth.triggerAttack("D4");
+    case "t":
+      return synth.triggerAttack("D#4");
+    case "g":
+      return synth.triggerAttack("E4");
+    case "h":
+      return synth.triggerAttack("F4");
+    case "u":
+      return synth.triggerAttack("F#4");
+    case "j":
+      return synth.triggerAttack("G4");
+    case "i":
+      return synth.triggerAttack("G#4");
+    case "k":
+      return synth.triggerAttack("A4");
+    case "o":
+      return synth.triggerAttack("A#4");
+    case "l":
+      return synth.triggerAttack("B4");
+    default:
+      return;
+  }
+});
+// when the key is released, audio is released as well
+document.addEventListener("keyup", e => {
+  switch (e.key) {
+    case "d":
+    case "r":
+    case "f":
+    case "t":
+    case "g":
+    case "h":
+    case "u":
+    case "j":
+    case "i":
+    case "k":
+    case "o":
+    case "l":
+       synth.triggerRelease(); 
+  }
+});
 // Existing code unchanged.
 window.onload = function() {
     var context = new AudioContext();
@@ -401,7 +285,9 @@ go(finalSelection);
     ///// transcribe the pitches of each response
     ///// check that they contain finalSelection - otherwise X
     ///// if so, load triggered pitches loaded into an array
-    ///// Make rhythm flexible - but you have a time limit!
+	///// Make rhythm flexible - but you have a time limit!
+	
+	// eventlisteners for each pitch (querySelector for each note) transcribe a number? Load this into playerChoices array?
 
 
 /////////////////////////////////////////////// COMPARE PITCHES ///////////////////////////////////////////

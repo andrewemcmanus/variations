@@ -9,21 +9,12 @@
 
 // Tone.Synth is a basic synthesizer with a single oscillator
 const synth = new Tone.Synth();
-const now = Tone.now()
+const now = Tone.now();
 // Set the tone to sine
 synth.oscillator.type = "sine";
 // connect it to the master output (your speakers)
 
 synth.toMaster();
-
-createPlayButton = () => {
-  let playButton = document.createElement('button');
-  userMusicControls.appendChild(playButton);
-  playButton.setAttribute('id', 'btn-play');
-  playButton.setAttribute('class', 'btn-control');
-  playButton.setAttribute('onclick', 'playUserMusic()');
-  playButton.innerText = '> Play';
-}
 
 const piano = document.getElementById("piano");
 
@@ -112,7 +103,7 @@ document.addEventListener("keyup", e => {
        synth.triggerRelease(); 
   }
 });
-// async function for player choices?
+
 // Existing code unchanged.
 window.onload = function() {
     var context = new AudioContext();
@@ -130,26 +121,27 @@ window.onload = function() {
 
  // generate a major chord: 
 
-function makeArray() { // add event listener here to play the game
+function makeArray() { 
     let root = Math.floor(Math.random() * Math.floor(5)) + 1;
     // console.log(root);
     const array1 = [root, root + 4, root + 7];
     const array2 = [root, root + 3, root + 8];
     const array3 = [root, root + 5, root + 9];
     let inversion = Math.floor(Math.random() * Math.floor(3)) + 1; // adding 1 apparently works...
-        if (inversion = 1) {
+        if (inversion == 1) {
             let choice = array1;
             return choice;
-        } else if (inversion = 2) {
+        } else if (inversion == 2) {
             let choice = array2;
             return choice;
-        } else if (inversion = 3) {
+        } else if (inversion == 3) {
             let choice = array3;
             return choice;
         }
 }
 
-let choice = makeArray();
+var choice = makeArray();
+console.log(choice);
 // keep the chord above within the 12 keys on the keyboard 
 function keepInOctave () {
     if (choice[2] <= 12) {
@@ -161,11 +153,11 @@ function keepInOctave () {
 
 var selection = keepInOctave();
 
-function order (array) {
+function pitchOrder () {
     let order = Math.floor(Math.random * Math.floor(5));
-    const pitchA = array[0];
-    const pitchB = array[1];
-    const pitchC = array[2];
+    const pitchA = selection[0];
+    const pitchB = selection[1];
+    const pitchC = selection[2];
     if (order = 0) {
         let final1 = [pitchA, pitchB, pitchC];
         return final1;
@@ -186,8 +178,8 @@ function order (array) {
         return final6;
     }
 }
-var finalSelection = order(selection);
-console.log(finalSelection);
+var finalSelection = pitchOrder();
+console.log(finalSelection); // NUMBERS (makes sorting them easier later)
 
 // define the array of non-chord tones that the player can use:
 
@@ -209,7 +201,7 @@ var chromNCTs = defineNCTs(finalSelection);
 ////////////// convert to pitches for computer to play back ////////////////////
 function toNoteNames (array) { 
     let playbackNames = [];
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < array.length; i++) {
         if (array[i] == 1) {
             playbackNames.push("C4");
         } else if (array[i] == 2) {
@@ -240,11 +232,11 @@ function toNoteNames (array) {
 }
 
 var chordNoteNames = toNoteNames(finalSelection);
+var nonChordTones = toNoteNames(chromNCTs);
 console.log(chordNoteNames);
-console.log(chromNCTs);
+console.log(nonChordTones);
 
 //////////////////////////////////// COMPUTER PLAYBACK GOES HERE ////////////////////////////////
-// event listener: button
 
 function playComputer () {
   let first = chordNoteNames[0];
@@ -254,30 +246,6 @@ function playComputer () {
   synth.triggerAttackRelease(second, "4n", now + 1);
   synth.triggerAttackRelease(third, "4n", now + 2);
 };
-// var volume = new Tone.Volume(-12).toMaster();
-
-//create a synth and connect it to the main output (your speakers) - or just use the synth above?
-
-// function go (array) {
-//     let seq = new Tone.Sequence(function(time, idx)) {
-
-//     }, array, "4n";
-//     Tone.Transport(start('+0.2'));
-//     seq.start();
-// };
-
-// go(finalSelection);
-
-
-/////convert finalSelection to pitches, then play them using tone.js
-
-////////////////////////////////////////// PLAYER RESPONSES GO HERE ////////////////////////////////////////
-    ///// transcribe the pitches of each response - IN EVENT LISTENERS ABOVE
-    ///// if so, load triggered pitches loaded into an array
-	///// Make rhythm flexible - but you have a very short time limit!
-	
-	// eventlisteners for each pitch (querySelector for each note) transcribe a number? Load this into playerChoices array?
-
 
 /////////////////////////////////////////////// COMPARE PITCHES ///////////////////////////////////////////
 // var computerChoices = assemble(finalSelection, chromNCTs);
@@ -286,24 +254,28 @@ function playComputer () {
 //   const computer = new Variation(finalSelection, chromNCTs);
 //   const player = new Variation(finalSelection, "allNCTs"); // selections from their 5 turns?
 //  if finalSelection isn't contained within each playerChoice - lose points
-
-function compareNumberOfPitches() {
-    let duplicates = [];  
-    if (computerChoices.length > playerChoices.length) {
-          // console.log('you lose!');
-          return duplicates;
-          // use DOM to place messages on the screen
-      } else if (computerChoices.length < playerChoices.length) {
-            for (let i = 0; i < playerChoices.length; i++) {
-              let value = playerChoices[i];
-              if (playerChoices.indexOf(value) !== -1) {
-                duplicates.push(playerChoices[i]);
-              }
-              return duplicates;
-            }
-          }
+// WAIT TO RUN THIS FUNCTION:
+function comparePitches() {
+  let first = chordNoteNames[0];
+  let second = chordNoteNames[1];
+  let third = chordNoteNames[2];
+  let pitches = [];  
+  if (playerChoices.includes(first) && playerChoices.includes(second) && playerChoices.includes(third)) {
+      console.log("You're ok!");
+      for (let i = 0; i < nonChordTones.length; i++) {
+        let pitch = nonChordTones[i];
+        if (playerChoices.includes(pitch)) {
+          pitches.push(pitch);
+        }
       }
-var duplicates = compareNumberOfPitches(); // do something, connect it to DOM
+      let points = pitches.length;
+      console.log(points);
+      return points;
+        } else {
+          console.log("You lose!");
+          return points;
+        }
+      };
       
 // a way to keep track of a player score (From drum machine)
 updatePlayerScore = (score, difficulty, remainingTime) => { // replace "difficulty" with a different parameter
@@ -332,17 +304,6 @@ showScoreBoard = (roundSc, timeBo, playerSc, remainingTime) => {
       }
 
 
-// function adjustScore() {
-//     var score;
-//     if (duplicates = 0) {
-//         return score;
-//     } else {
-//         for (i = 0; i < duplicates.length; i++) {
-//             var score = score - 1;
-//             return score;
-//         }
-//     }
-// }
 ////// CLEAR PLAYERCHOICES AT THE END OF EACH TURN ////////////////
 
 

@@ -1,11 +1,29 @@
-
+// let musicPlaying;
+// let playerScore = 0;
+// let roundNb = 0;
+// let roundIsStarted = false;
+// let userMusicIsPlaying = false;
+// let tempo = partitionsToPickFrom[roundNb].tempo; // user tempo removed
+// let timeoutTempo = 60000 / (tempo * 2);
+//attach a click listener to a play button
 
 // Tone.Synth is a basic synthesizer with a single oscillator
 const synth = new Tone.Synth();
+const now = Tone.now()
 // Set the tone to sine
 synth.oscillator.type = "sine";
 // connect it to the master output (your speakers)
+
 synth.toMaster();
+
+createPlayButton = () => {
+  let playButton = document.createElement('button');
+  userMusicControls.appendChild(playButton);
+  playButton.setAttribute('id', 'btn-play');
+  playButton.setAttribute('class', 'btn-control');
+  playButton.setAttribute('onclick', 'playUserMusic()');
+  playButton.innerText = '> Play';
+}
 
 const piano = document.getElementById("piano");
 
@@ -20,33 +38,58 @@ piano.addEventListener("mouseup", e => {
 });
 
 // handles keyboard events
+var playerChoices = [];
 document.addEventListener("keydown", e => {
   // e object has the key property to tell which key was pressed
   switch (e.key) {
     case "d":
-      return synth.triggerAttack("C4");
+		playerChoices.push("C4");
+		console.log(playerChoices);
+	  	return synth.triggerAttack("C4");
     case "r":
-      return synth.triggerAttack("C#4");
+		playerChoices.push("C#4");
+		console.log(playerChoices);
+      	return synth.triggerAttack("C#4");
     case "f":
-      return synth.triggerAttack("D4");
+		playerChoices.push("D4");
+		console.log(playerChoices);
+      	return synth.triggerAttack("D4");
     case "t":
-      return synth.triggerAttack("D#4");
+		playerChoices.push("D#4");
+		console.log(playerChoices);
+     	return synth.triggerAttack("D#4");
     case "g":
-      return synth.triggerAttack("E4");
+		playerChoices.push("E4");
+		console.log(playerChoices);
+      	return synth.triggerAttack("E4");
     case "h":
-      return synth.triggerAttack("F4");
+		playerChoices.push("F4");
+		console.log(playerChoices);
+      	return synth.triggerAttack("F4");
     case "u":
-      return synth.triggerAttack("F#4");
+		playerChoices.push("F#4");
+		console.log(playerChoices);
+      	return synth.triggerAttack("F#4");
     case "j":
-      return synth.triggerAttack("G4");
+		playerChoices.push("G4");
+		console.log(playerChoices);
+      	return synth.triggerAttack("G4");
     case "i":
-      return synth.triggerAttack("G#4");
+		playerChoices.push("G#4");
+		console.log(playerChoices);
+      	return synth.triggerAttack("G#4");
     case "k":
-      return synth.triggerAttack("A4");
+		playerChoices.push("A4");
+		console.log(playerChoices);
+      	return synth.triggerAttack("A4");
     case "o":
-      return synth.triggerAttack("A#4");
+		playerChoices.push("A#4");
+		console.log(playerChoices);
+      	return synth.triggerAttack("A#4");
     case "l":
-      return synth.triggerAttack("B4");
+		playerChoices.push("B4");
+		console.log(playerChoices);
+      	return synth.triggerAttack("B4");
     default:
       return;
   }
@@ -69,6 +112,7 @@ document.addEventListener("keyup", e => {
        synth.triggerRelease(); 
   }
 });
+// async function for player choices?
 // Existing code unchanged.
 window.onload = function() {
     var context = new AudioContext();
@@ -76,20 +120,17 @@ window.onload = function() {
   };
   
   // One-liner to resume playback when user interacted with the page.
-  document.querySelector('button').addEventListener('click', function() {
-    context.resume().then(() => {
-      console.log('Playback resumed successfully');
-    });
-  });
-
-
-// final Selection: connect to event listeners
+  // document.querySelector('button').addEventListener('click', function() {
+  //   context.resume().then(() => {
+  //     console.log('Playback resumed successfully');
+  //   });
+  // });
 
 //////////////////// PITCHES: ///////////////////////
 
  // generate a major chord: 
 
-function makeArray() {
+function makeArray() { // add event listener here to play the game
     let root = Math.floor(Math.random() * Math.floor(5)) + 1;
     // console.log(root);
     const array1 = [root, root + 4, root + 7];
@@ -200,10 +241,19 @@ function toNoteNames (array) {
 
 var chordNoteNames = toNoteNames(finalSelection);
 console.log(chordNoteNames);
-// console.log(chromNCTs);
+console.log(chromNCTs);
 
 //////////////////////////////////// COMPUTER PLAYBACK GOES HERE ////////////////////////////////
+// event listener: button
 
+function playComputer () {
+  let first = chordNoteNames[0];
+  let second = chordNoteNames[1];
+  let third = chordNoteNames[2];
+  synth.triggerAttackRelease(first, "4n", now);
+  synth.triggerAttackRelease(second, "4n", now + 1);
+  synth.triggerAttackRelease(third, "4n", now + 2);
+};
 // var volume = new Tone.Volume(-12).toMaster();
 
 //create a synth and connect it to the main output (your speakers) - or just use the synth above?
@@ -222,8 +272,7 @@ console.log(chordNoteNames);
 /////convert finalSelection to pitches, then play them using tone.js
 
 ////////////////////////////////////////// PLAYER RESPONSES GO HERE ////////////////////////////////////////
-    ///// transcribe the pitches of each response
-    ///// check that they contain all 3 pitches of finalSelection - otherwise X
+    ///// transcribe the pitches of each response - IN EVENT LISTENERS ABOVE
     ///// if so, load triggered pitches loaded into an array
 	///// Make rhythm flexible - but you have a very short time limit!
 	
@@ -232,29 +281,29 @@ console.log(chordNoteNames);
 
 /////////////////////////////////////////////// COMPARE PITCHES ///////////////////////////////////////////
 // var computerChoices = assemble(finalSelection, chromNCTs);
-// var playerChoices = assemble(finalSelection, allNCTs);
+
 
 //   const computer = new Variation(finalSelection, chromNCTs);
 //   const player = new Variation(finalSelection, "allNCTs"); // selections from their 5 turns?
 //  if finalSelection isn't contained within each playerChoice - lose points
 
-// function compareNumberOfPitches() {
-//     let duplicates = [];  
-//     if (computerChoices.length > playerChoices.length) {
-//           console.log('you lose!');
-//           return duplicates;
-//           // use DOM to place messages on the screen
-//       } else if (computerChoices.length < playerChoices.length) {
-//             for (let i = 0; i < playerChoices.length; i++) {
-//               let value = playerChoices[i];
-//               if (playerChoices.indexOf(value) !== -1) {
-//                 duplicates.push(playerChoices[i]);
-//               }
-//               return duplicates;
-//             }
-//           }
-//       }
-// var duplicates = compareNumberOfPitches(); // do something, connect it to DOM
+function compareNumberOfPitches() {
+    let duplicates = [];  
+    if (computerChoices.length > playerChoices.length) {
+          // console.log('you lose!');
+          return duplicates;
+          // use DOM to place messages on the screen
+      } else if (computerChoices.length < playerChoices.length) {
+            for (let i = 0; i < playerChoices.length; i++) {
+              let value = playerChoices[i];
+              if (playerChoices.indexOf(value) !== -1) {
+                duplicates.push(playerChoices[i]);
+              }
+              return duplicates;
+            }
+          }
+      }
+var duplicates = compareNumberOfPitches(); // do something, connect it to DOM
       
 // a way to keep track of a player score (From drum machine)
 updatePlayerScore = (score, difficulty, remainingTime) => { // replace "difficulty" with a different parameter
@@ -294,7 +343,7 @@ showScoreBoard = (roundSc, timeBo, playerSc, remainingTime) => {
 //         }
 //     }
 // }
-
+////// CLEAR PLAYERCHOICES AT THE END OF EACH TURN ////////////////
 
 
 // Tone.js abstracts away the AudioContext time. 

@@ -1,7 +1,6 @@
 // let musicPlaying;
 
 let playerScore = 0;
-let timeoutTempo = 5000;
 //attach a click listener to a play button
 
 // Tone.Synth is a basic synthesizer with a single oscillator
@@ -25,11 +24,6 @@ piano.addEventListener("mouseup", e => {
   // stops the trigger
   synth.triggerRelease();
 });
-
-// Create an SVG renderer and attach it to the DIV element named "boo".
-// var vf = new Vex.Flow.Factory({renderer: {elementId: 'boo'}});
-// var score = vf.EasyScore();
-// var system = vf.System();
 
 var playerChoices = [];
 document.addEventListener("keydown", e => {
@@ -285,8 +279,57 @@ function playComputer () {
 /////////////////////////////////////////////// COMPARE PITCHES ///////////////////////////////////////////
 function playerGo () {
   document.querySelector("#go").innerText = "Go!";
-  console.log("Go!");
+  document.getElementById("player-score").innerText = playerScore;
 };
+
+const TIME_LIMIT = 4;
+// Initially, no time has passed, but this will count up
+// and subtract from the TIME_LIMIT
+let timePassed = 0;
+let timeLeft = TIME_LIMIT;
+
+document.getElementById("app").innerHTML = `
+<div class="base-timer">
+  <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g class="base-timer__circle">
+      <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45" />
+    </g>
+  </svg>
+  <span id="base-timer-label" class="base-timer__label">
+    ${formatTimeLeft(timeLeft)}
+  </span>
+</div>
+`;
+
+function formatTimeLeft(time) {
+  // The largest round integer less than or equal to the result of time divided being by 60.
+  const minutes = Math.floor(time / 60);
+  // Seconds are the remainder of the time divided by 60 (modulus operator)
+  let seconds = time % 60;
+  // If the value of seconds is less than 10, then display seconds with a leading zero
+  if (seconds < 10) {
+    seconds = `0${seconds}`;
+  }
+  // The output in MM:SS format
+  return `${minutes}:${seconds}`;
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    
+    // The amount of time passed increments by one
+    timePassed = timePassed += 1;
+    timeLeft = TIME_LIMIT - timePassed;
+    
+    // The time left label is updated
+    document.getElementById("base-timer-label").innerHTML = formatTimeLeft(timeLeft);
+  }, 1000);
+};
+
+// function stopTimer () {
+  
+// };
+
 
 function comparePitches() {
   let first = chordNoteNames[0];
@@ -303,12 +346,13 @@ function comparePitches() {
       }
       let points = pitches.length;
       document.getElementById("player-score").innerText = points;
-      console.log(points);
+      // console.log(points);
+      clearInterval(timerInterval);
       Tone.context.close();
       return points;
         } else {
           document.querySelector('#go').innerText = "Try again!";
-          console.log("Try again!");
+          clearInterval(timerInterval);
           Tone.context.close();
           return points;
         }
@@ -322,6 +366,7 @@ function comparePitches() {
         await delay(0);
         playComputer(); // add a function to start time slot?
         await delay(4000);
+        startTimer();
         playerGo();
         await delay(8000);
         let playerScore = comparePitches();
@@ -335,7 +380,6 @@ function comparePitches() {
 ////// CLEAR PLAYERCHOICES AT THE END OF EACH TURN? ////////////////
 
 function playAgain () {
-  
   let playerChoices = [];
   let finalSelection = [];
   let playerScore = 0;

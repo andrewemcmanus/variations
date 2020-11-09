@@ -17,15 +17,15 @@
 <div class="general-section-user">
   <div id="user-music-controls">
     <p id="button-play-div">
-      <button onclick="play()" class="btn-control" id="btn-play">
-        > Play
+      <button type="button" onclick="play()" class="btn-control" id="btn-play">
+        Play
       </button>
     </p>
     <h3 id="go">
     </h3>
   </div>
-<div id="boo"></div>
-
+  <h3 id="player-score"></h3>
+  <div id="app"></div>
 <ul id="piano">
     <li data-note="C4" class="key" id="C">
       <div data-note="C#4" class="black-key" id="Csharp">R</div>
@@ -54,16 +54,14 @@
       L
     </li>
 </ul>
-<h3 id="player-score"></h3>
 <div id="reset">
       <p id="end-game">
-        <button onclick="playAgain()" class="btn-control">
-          > Play again
+        <button type="button" onclick="playAgain()" class="btn-control">
+          Play again
         </button>
 </div>
                <!-- <button onclick="playMusic" (a function) -->
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.68/Tone.js" integrity="sha512-eBjUIAF/NN5kcGlFXz5n9UMAv+LKYFqtGnqHu83qQCXRJaL6iSsjFeOdft9AK9lD/9meTkj/5ctn6DGV5rz6Pg==" crossorigin="anonymous"></script>
-<script async src="//jsfiddle.net/0b6hcc69/83/embed/"></script>
 <script src="app.js"></script>
 </html>

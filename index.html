@@ -7,24 +7,22 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="menu">
+  <h1>Variation Improv Battle!</h1>
+<!-- <div class="menu">
     <li><a href="#">One</a></li>
     <li><a href="#">Two</a></li>
     <li><a href="#">Three</a></li>
     <li><a href="#">Four</a></li>
-</div>
+</div> -->
 <div class="general-section-user">
   <div id="user-music-controls">
     <p id="button-play-div">
-      <button onclick="playComputer()" class="btn-control" id="btn-play">
+      <button onclick="play()" class="btn-control" id="btn-play">
         > Play
       </button>
     </p>
-    <p id="start-or-listen-button">
-      <button onclick="comparePitches()" class="btn=control" id="compare-pitches">
-        > Compare
-      </button>
-    </p>
+    <h3 id="go">
+    </h3>
   </div>
 
 
@@ -56,6 +54,13 @@
       L
     </li>
 </ul>
+<h3 id="player-score"></h3>
+<div id="reset">
+      <p id="end-game">
+        <button onclick="playAgain()" class="btn-control">
+          > Play again
+        </button>
+</div>
                <!-- <button onclick="playMusic" (a function) -->
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.68/Tone.js" integrity="sha512-eBjUIAF/NN5kcGlFXz5n9UMAv+LKYFqtGnqHu83qQCXRJaL6iSsjFeOdft9AK9lD/9meTkj/5ctn6DGV5rz6Pg==" crossorigin="anonymous"></script>

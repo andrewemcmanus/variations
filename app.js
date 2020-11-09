@@ -1,20 +1,18 @@
 // let musicPlaying;
-// let playerScore = 0;
-// let roundNb = 0;
-// let roundIsStarted = false;
-// let userMusicIsPlaying = false;
-// let tempo = partitionsToPickFrom[roundNb].tempo; // user tempo removed
-// let timeoutTempo = 60000 / (tempo * 2);
+
+let playerScore = 0;
+let timeoutTempo = 5000;
 //attach a click listener to a play button
 
 // Tone.Synth is a basic synthesizer with a single oscillator
-const synth = new Tone.Synth();
-const now = Tone.now();
+let context = new AudioContext();
+let synth = new Tone.Synth();
+let now = Tone.now();
 // Set the tone to sine
 synth.oscillator.type = "sine";
 // connect it to the master output (your speakers)
 
-synth.toMaster();
+synth.toDestination();
 
 const piano = document.getElementById("piano");
 
@@ -28,7 +26,6 @@ piano.addEventListener("mouseup", e => {
   synth.triggerRelease();
 });
 
-// handles keyboard events
 var playerChoices = [];
 document.addEventListener("keydown", e => {
   // e object has the key property to tell which key was pressed
@@ -104,18 +101,6 @@ document.addEventListener("keyup", e => {
   }
 });
 
-// Existing code unchanged.
-window.onload = function() {
-    var context = new AudioContext();
-    // Setup all nodes
-  };
-  
-  // One-liner to resume playback when user interacted with the page.
-  // document.querySelector('button').addEventListener('click', function() {
-  //   context.resume().then(() => {
-  //     console.log('Playback resumed successfully');
-  //   });
-  // });
 
 //////////////////// PITCHES: ///////////////////////
 
@@ -146,12 +131,15 @@ console.log(choice);
 function keepInOctave () {
     if (choice[2] <= 12) {
         return choice;
-    } else {
-        console.log('Run again'); //
-    }
+    } else if (choice[2] > 12) {
+      let newchoice = choice[2] - 12;
+      choice.pop();
+      choice.push(newchoice);
+      return choice;
+    } 
 }
 
-var selection = keepInOctave();
+var selection = keepInOctave(); // need to call these functions INSIDE playComputer
 
 function pitchOrder () {
     let order = Math.floor(Math.random * Math.floor(5));
@@ -242,19 +230,18 @@ function playComputer () {
   let first = chordNoteNames[0];
   let second = chordNoteNames[1];
   let third = chordNoteNames[2];
+  document.querySelector("#go").innerText = "Listen...";
   synth.triggerAttackRelease(first, "4n", now);
   synth.triggerAttackRelease(second, "4n", now + 1);
   synth.triggerAttackRelease(third, "4n", now + 2);
 };
 
 /////////////////////////////////////////////// COMPARE PITCHES ///////////////////////////////////////////
-// var computerChoices = assemble(finalSelection, chromNCTs);
+function playerGo () {
+  document.querySelector("#go").innerText = "Go!";
+  console.log("Go!");
+};
 
-
-//   const computer = new Variation(finalSelection, chromNCTs);
-//   const player = new Variation(finalSelection, "allNCTs"); // selections from their 5 turns?
-//  if finalSelection isn't contained within each playerChoice - lose points
-// WAIT TO RUN THIS FUNCTION:
 function comparePitches() {
   let first = chordNoteNames[0];
   let second = chordNoteNames[1];
@@ -269,42 +256,47 @@ function comparePitches() {
         }
       }
       let points = pitches.length;
+      document.getElementById("player-score").innerText = points;
       console.log(points);
+      Tone.context.close();
       return points;
         } else {
-          console.log("You lose!");
+          document.querySelector('#go').innerText = "Try again!";
+          console.log("Try again!");
+          Tone.context.close();
           return points;
         }
       };
       
-// a way to keep track of a player score (From drum machine)
-updatePlayerScore = (score, difficulty, remainingTime) => { // replace "difficulty" with a different parameter
-    const roundScore = (score * difficulty);
-    const timeBonus = Math.round(remainingTime * 10);
-    playerScore = playerScore + (roundScore + timeBonus);
-    showScoreBoard(roundScore, timeBonus, playerScore, remainingTime); 
-    document.getElementById('score-span').innerText = `Score: ${playerScore}`;
-      }
+      async function delay(ms) {
+        return await new Promise(resolve => setTimeout(resolve, ms));
+      };
       
-showScoreBoard = (roundSc, timeBo, playerSc, remainingTime) => {
-    let scoreBoard = document.getElementById('score-board');
-    let boardTitle = document.getElementById('board-title');
-    let boardRoundScore = document.getElementById('board-round-score');
-    let boardTimeBonus = document.getElementById('board-time-bonus');
-    let boardTotalScore = document.getElementById('board-total-score');
-    const titleText = (remainingTime) ? "Round Passed!" : "Time's up!";
-    boardTitle.innerText = titleText;
-    boardRoundScore.innerText = roundSc;
-    boardTimeBonus.innerText = timeBo;
-    boardTotalScore.innerText = playerSc;
-    scoreBoard.style.display = 'flex';
-    setTimeout(() => {
-      scoreBoard.style.display = 'none';
-        }, 4000);
-      }
-
+      let play = async ()=>{
+        await delay(0);
+        playComputer(); // add a function to start time slot?
+        await delay(4000);
+        playerGo();
+        await delay(8000);
+        let playerScore = comparePitches();
+        if (playerScore < 5) {
+          document.querySelector("#go").innerText = "Try again!";
+          console.log("Try again!");
+        }
+      };
 
 ////// CLEAR PLAYERCHOICES AT THE END OF EACH TURN ////////////////
+
+function playAgain () {
+  
+  let playerChoices = [];
+  let finalSelection = [];
+  let playerScore = 0;
+  document.getElementById("player-score").innerText = "0";
+  return playerChoices, finalSelection, playerScore;
+}
+
+
 
 
 // Tone.js abstracts away the AudioContext time. 

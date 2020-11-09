@@ -26,58 +26,75 @@ piano.addEventListener("mouseup", e => {
   synth.triggerRelease();
 });
 
+// Create an SVG renderer and attach it to the DIV element named "boo".
+// var vf = new Vex.Flow.Factory({renderer: {elementId: 'boo'}});
+// var score = vf.EasyScore();
+// var system = vf.System();
+
 var playerChoices = [];
 document.addEventListener("keydown", e => {
   // e object has the key property to tell which key was pressed
   switch (e.key) {
     case "d":
-		playerChoices.push("C4");
-		console.log(playerChoices);
+    playerChoices.push("C4");
+    document.getElementById("C").style.background = "red";
+		// console.log(playerChoices);
 	  	return synth.triggerAttack("C4");
     case "r":
-		playerChoices.push("C#4");
-		console.log(playerChoices);
+    playerChoices.push("C#4");
+    document.getElementById("Csharp").style.background = "red";
+		// console.log(playerChoices);
       	return synth.triggerAttack("C#4");
     case "f":
-		playerChoices.push("D4");
-		console.log(playerChoices);
+    playerChoices.push("D4");
+    document.getElementById("D").style.background = "red";
+		// console.log(playerChoices);
       	return synth.triggerAttack("D4");
     case "t":
-		playerChoices.push("D#4");
-		console.log(playerChoices);
+    playerChoices.push("D#4");
+    document.getElementById("Dsharp").style.background = "red";
+		// console.log(playerChoices);
      	return synth.triggerAttack("D#4");
     case "g":
-		playerChoices.push("E4");
-		console.log(playerChoices);
+    playerChoices.push("E4");
+    document.getElementById("E").style.background = "red";
+		// console.log(playerChoices);
       	return synth.triggerAttack("E4");
     case "h":
-		playerChoices.push("F4");
-		console.log(playerChoices);
+    playerChoices.push("F4");
+    document.getElementById("F").style.background = "red";
+		// console.log(playerChoices);
       	return synth.triggerAttack("F4");
     case "u":
-		playerChoices.push("F#4");
-		console.log(playerChoices);
+    playerChoices.push("F#4");
+    document.getElementById("Fsharp").style.background = "red";
+		// console.log(playerChoices);
       	return synth.triggerAttack("F#4");
     case "j":
-		playerChoices.push("G4");
-		console.log(playerChoices);
+    playerChoices.push("G4");
+    document.getElementById("G").style.background = "red";
+		// console.log(playerChoices);
       	return synth.triggerAttack("G4");
     case "i":
-		playerChoices.push("G#4");
-		console.log(playerChoices);
+    playerChoices.push("G#4");
+    document.getElementById("Gsharp").style.background = "red";
+		// console.log(playerChoices);
       	return synth.triggerAttack("G#4");
     case "k":
-		playerChoices.push("A4");
-		console.log(playerChoices);
+    playerChoices.push("A4");
+    document.getElementById("A").style.background = "red";
+		// console.log(playerChoices);
       	return synth.triggerAttack("A4");
     case "o":
-		playerChoices.push("A#4");
-		console.log(playerChoices);
+    playerChoices.push("A#4");
+    document.getElementById("Asharp").style.background = "red";
+		// console.log(playerChoices);
       	return synth.triggerAttack("A#4");
     case "l":
-		playerChoices.push("B4");
-		console.log(playerChoices);
-      	return synth.triggerAttack("B4");
+    playerChoices.push("B4");
+    document.getElementById("B").style.background = "red";
+		// console.log(playerChoices);
+        return synth.triggerAttack("B4");
     default:
       return;
   }
@@ -86,18 +103,43 @@ document.addEventListener("keydown", e => {
 document.addEventListener("keyup", e => {
   switch (e.key) {
     case "d":
+      document.getElementById("C").style.background = "#fffff0";
+      synth.triggerRelease();
     case "r":
+      document.getElementById("Csharp").style.background = "black";
+      synth.triggerRelease();
     case "f":
+      document.getElementById("D").style.background = "#fffff0";
+      synth.triggerRelease();
     case "t":
+      document.getElementById("Dsharp").style.background = "black";
+      synth.triggerRelease();
     case "g":
+      document.getElementById("E").style.background = "#fffff0";
+      synth.triggerRelease();
     case "h":
+      document.getElementById("F").style.background = "#fffff0";
+      synth.triggerRelease();
     case "u":
+      document.getElementById("Fsharp").style.background = "black";
+      synth.triggerRelease();
     case "j":
+      document.getElementById("G").style.background = "#fffff0";
+      synth.triggerRelease();
     case "i":
+      document.getElementById("Gsharp").style.background = "black";
+      synth.triggerRelease();
     case "k":
+      document.getElementById("A").style.background = "#fffff0";
+      synth.triggerRelease();
     case "o":
+      document.getElementById("Asharp").style.background = "black";
+      synth.triggerRelease();
     case "l":
-       synth.triggerRelease(); 
+      document.getElementById("B").style.background = "#fffff0";
+      synth.triggerRelease();
+    default:
+      return; 
   }
 });
 
@@ -230,6 +272,10 @@ function playComputer () {
   let first = chordNoteNames[0];
   let second = chordNoteNames[1];
   let third = chordNoteNames[2];
+  // system.addStave({
+  //   voices: [score.voice(score.notes(first, second, third))]
+  // }).addClef('treble');
+  // vf.draw();
   document.querySelector("#go").innerText = "Listen...";
   synth.triggerAttackRelease(first, "4n", now);
   synth.triggerAttackRelease(second, "4n", now + 1);
@@ -281,11 +327,12 @@ function comparePitches() {
         let playerScore = comparePitches();
         if (playerScore < 5) {
           document.querySelector("#go").innerText = "Try again!";
-          console.log("Try again!");
+        } else if (playerScore >= 5) {
+          document.querySelector("#go").innerText = "You win!";
         }
       };
 
-////// CLEAR PLAYERCHOICES AT THE END OF EACH TURN ////////////////
+////// CLEAR PLAYERCHOICES AT THE END OF EACH TURN? ////////////////
 
 function playAgain () {
   

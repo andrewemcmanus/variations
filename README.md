@@ -3,6 +3,7 @@
 ## Overview
 ​
 Variations is a game that tests your ability to briefly improvise around a major chord!
+https://andrewemcmanus.github.io/
 
 ​
 ## Rules

@@ -34,6 +34,9 @@ I attempted to use VexFlow, a music notation API, to display the computer's outp
 
 The game obviously needs quite a bit more work on styling. The piano keyboard presented quite a few layout issues that I wasn't able to style around, so I simply went for basic text displays. The page also occasionally loads with a tone playing; refreshing it resolves the problem.
 ​
+## some win-lose examples in music notation:
+
+See `examples.png` in this repo for some winning and losing examples written in music notation.
 
 
 

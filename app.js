@@ -1,5 +1,3 @@
-// let musicPlaying;
-
 let playerScore = 0;
 //attach a click listener to a play button
 
@@ -162,7 +160,7 @@ function makeArray() {
 }
 
 var choice = makeArray();
-console.log(choice);
+
 // keep the chord above within the 12 keys on the keyboard 
 function keepInOctave () {
     if (choice[2] <= 12) {
@@ -174,9 +172,9 @@ function keepInOctave () {
       return choice;
     } 
 }
+var selection = keepInOctave();
 
-var selection = keepInOctave(); // need to call these functions INSIDE playComputer
-
+// mix up the order of the 3 pitches
 function pitchOrder () {
     let order = Math.floor(Math.random * Math.floor(5));
     const pitchA = selection[0];
@@ -203,9 +201,8 @@ function pitchOrder () {
     }
 }
 var finalSelection = pitchOrder();
-console.log(finalSelection); // NUMBERS (makes sorting them easier later)
 
-// define the array of non-chord tones that the player can use:
+// define the non-chord tones that the player must use:
 
 function defineNCTs (array) {
     let chromScale = [];
@@ -266,11 +263,10 @@ function playComputer () {
   let first = chordNoteNames[0];
   let second = chordNoteNames[1];
   let third = chordNoteNames[2];
-  // system.addStave({
-  //   voices: [score.voice(score.notes(first, second, third))]
-  // }).addClef('treble');
-  // vf.draw();
+  // let secondPrint = second.slice(0,1);
+  // let thirdPrint = third.slice(0,1);
   document.querySelector("#go").innerText = "Listen...";
+  document.querySelector("#pitches").innerText = first + "    " + second + "    " + third;
   synth.triggerAttackRelease(first, "4n", now);
   synth.triggerAttackRelease(second, "4n", now + 1);
   synth.triggerAttackRelease(third, "4n", now + 2);
@@ -279,12 +275,10 @@ function playComputer () {
 /////////////////////////////////////////////// COMPARE PITCHES ///////////////////////////////////////////
 function playerGo () {
   document.querySelector("#go").innerText = "Go!";
-  document.getElementById("player-score").innerText = playerScore;
+  document.getElementById("player-score").innerText = "Score: " + playerScore;
 };
 
-const TIME_LIMIT = 4;
-// Initially, no time has passed, but this will count up
-// and subtract from the TIME_LIMIT
+const TIME_LIMIT = 4; // 4 seconds
 let timePassed = 0;
 let timeLeft = TIME_LIMIT;
 
@@ -326,12 +320,8 @@ function startTimer() {
   }, 1000);
 };
 
-// function stopTimer () {
-  
-// };
-
-
 function comparePitches() {
+  clearInterval(timerInterval);
   let first = chordNoteNames[0];
   let second = chordNoteNames[1];
   let third = chordNoteNames[2];
@@ -345,14 +335,12 @@ function comparePitches() {
         }
       }
       let points = pitches.length;
-      document.getElementById("player-score").innerText = points;
+      document.getElementById("player-score").innerText = "Score: " + points;
       // console.log(points);
-      clearInterval(timerInterval);
       Tone.context.close();
       return points;
         } else {
           document.querySelector('#go').innerText = "Try again!";
-          clearInterval(timerInterval);
           Tone.context.close();
           return points;
         }
@@ -364,11 +352,11 @@ function comparePitches() {
       
       let play = async ()=>{
         await delay(0);
-        playComputer(); // add a function to start time slot?
-        await delay(4000);
+        playComputer(); 
+        await delay(5000);
         startTimer();
         playerGo();
-        await delay(8000);
+        await delay(4000);
         let playerScore = comparePitches();
         if (playerScore < 5) {
           document.querySelector("#go").innerText = "Try again!";
@@ -386,28 +374,6 @@ function playAgain () {
   document.getElementById("player-score").innerText = "0";
   return playerChoices, finalSelection, playerScore;
 }
-
-
-
-
-// Tone.js abstracts away the AudioContext time. 
-// Instead of defining all values in seconds, any method which takes time as an argument can accept a number or a string. 
-// For example "4n" is a quarter-note, "8t" is an eighth-note triplet, and "1m" is one measure.
-
-// document.querySelector('button')?.addEventListener(KEY, async () => {
-// 	await Tone.start()
-// 	console.log('audio is ready')
-// })
-
-
-// 3 note events separated by an even tempo (setInterval?)
-
-// next step: play selection
-
-///////////////////// HOW TO COMPARE EACH LISTENER VARIATION TO MAKE SURE THAT THEY'RE DIFFERENT /////////////////
-// Since each variation should be different, the player should limit the overlap of the 9 NCTs among variations
-// subtract the number of *repeated* NCTs from the total
-
 
 
 

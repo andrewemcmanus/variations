@@ -8,7 +8,6 @@ let now = Tone.now();
 // Set the tone to sine
 synth.oscillator.type = "sine";
 // connect it to the master output (your speakers)
-
 synth.toDestination();
 
 const piano = document.getElementById("piano");
@@ -17,7 +16,6 @@ piano.addEventListener("mousedown", e => {
   // fires off a note continously until trigger is released
   synth.triggerAttack(e.target.dataset.note);
 });
-
 piano.addEventListener("mouseup", e => {
   // stops the trigger
   synth.triggerRelease();
@@ -228,7 +226,7 @@ function toNoteNames (array) {
         } else if (array[i] == 2) {
             playbackNames.push("C#4");
         } else if (array[i] == 3) {
-            playbackNames.push("D");
+            playbackNames.push("D4");
         } else if (array[i] == 4) {
             playbackNames.push("D#4");
         } else if (array[i] == 5) {
@@ -263,8 +261,6 @@ function playComputer () {
   let first = chordNoteNames[0];
   let second = chordNoteNames[1];
   let third = chordNoteNames[2];
-  // let secondPrint = second.slice(0,1);
-  // let thirdPrint = third.slice(0,1);
   document.querySelector("#go").innerText = "Listen...";
   document.querySelector("#pitches").innerText = first + "    " + second + "    " + third;
   synth.triggerAttackRelease(first, "4n", now);
@@ -336,7 +332,6 @@ function comparePitches() {
       }
       let points = pitches.length;
       document.getElementById("player-score").innerText = "Score: " + points;
-      // console.log(points);
       Tone.context.close();
       return points;
         } else {
@@ -346,11 +341,12 @@ function comparePitches() {
         }
       };
       
-      async function delay(ms) {
+////////////////// ORGANIZE FUNCTIONS TIMING ///////////////////
+async function delay(ms) {
         return await new Promise(resolve => setTimeout(resolve, ms));
       };
       
-      let play = async ()=>{
+let play = async ()=>{
         await delay(0);
         playComputer(); 
         await delay(5000);
@@ -374,8 +370,3 @@ function playAgain () {
   document.getElementById("player-score").innerText = "0";
   return playerChoices, finalSelection, playerScore;
 }
-
-
-
-
-

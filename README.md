@@ -26,7 +26,7 @@ For the computer, this meant randomly generating major chords, limiting the choi
 
 ## Technologies: Tone.js and VexFlow
 
-I used the tone.js audio API for basic playback. Unfortunately I ran into problems when trying to create more elaborate and interesting sounds, so this version of the game only uses a simple sine tone. Tone.js also made it impossible to reset the game without refreshing the page, so the "play again" button won't reset the audio.   
+In addition to HTML, CSS and Javascript, I used the tone.js audio API for basic playback. Unfortunately I ran into problems when trying to create more elaborate and interesting sounds, so this version of the game only uses a simple sine tone. Tone.js also made it impossible to reset the game without refreshing the page, so the "play again" button won't reset the audio.   
 
 I attempted to use VexFlow, a music notation API, to display the computer's output for the player. Unfortunately I couldn't solve any of the issues with that, so I had to use the DOM to display the pitch names instead.
 

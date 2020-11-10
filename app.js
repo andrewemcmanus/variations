@@ -228,7 +228,7 @@ function toNoteNames (array) {
         } else if (array[i] == 2) {
             playbackNames.push("C#4");
         } else if (array[i] == 3) {
-            playbackNames.push("D");
+            playbackNames.push("D4");
         } else if (array[i] == 4) {
             playbackNames.push("D#4");
         } else if (array[i] == 5) {

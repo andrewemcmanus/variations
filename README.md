@@ -12,6 +12,7 @@ When you click "play", the computer will play you three pitches from a major cho
 * **uses all three pitches the computer gives you**
 * **uses at least 5 non-chord tones**
 ​
+
 The piano keyboard is labeled with the computer keyboard keys that you need to use.
 
 ## Approaches: random input and pitch collision detections

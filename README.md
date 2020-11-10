@@ -8,7 +8,7 @@ https://andrewemcmanus.github.io/
 ​
 ## Rules
 ​
-When you click "play", the computer will play you three pitches from a major chord. Your job is to play a melodic variation on that major chord before the clock runs out. You win if your variation does the following two things:
+When you click `Play`, the computer will play you three pitches from a major chord. Your job is to play a melodic variation on that major chord before the clock runs out. You win if your variation does the following two things:
 ​
 * **uses all three pitches the computer gives you**
 * **uses at least 5 non-chord tones**

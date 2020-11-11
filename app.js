@@ -270,8 +270,10 @@ function playComputer () {
 
 /////////////////////////////////////////////// COMPARE PITCHES ///////////////////////////////////////////
 function playerGo () {
+  let playerChoices = [];
   document.querySelector("#go").innerText = "Go!";
   document.getElementById("player-score").innerText = "Score: " + playerScore;
+  return playerChoices;
 };
 
 const TIME_LIMIT = 4; // 4 seconds
@@ -323,7 +325,7 @@ function comparePitches() {
   let third = chordNoteNames[2];
   let pitches = [];  
   if (playerChoices.includes(first) && playerChoices.includes(second) && playerChoices.includes(third)) {
-      console.log("You're ok!");
+      // console.log("You're ok!");
       for (let i = 0; i < nonChordTones.length; i++) {
         let pitch = nonChordTones[i];
         if (playerChoices.includes(pitch)) {

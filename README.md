@@ -123,9 +123,12 @@ function defineNCTs (array) {
 
 var chromNCTs = defineNCTs(finalSelection);`
 
+```
+
 This function stops the timer and evaluates the player's input:
 
-`function comparePitches() {
+```
+function comparePitches() {
   clearInterval(timerInterval);
   let first = chordNoteNames[0];
   let second = chordNoteNames[1];

@@ -136,8 +136,7 @@ document.addEventListener("keyup", e => {
 
 //////////////////// PITCHES: ///////////////////////
 
- // generate a major chord: 
-
+// generate a major chord: 
 function makeArray() { 
     let root = Math.floor(Math.random() * Math.floor(5)) + 1;
     // console.log(root);
@@ -325,7 +324,6 @@ function comparePitches() {
   let third = chordNoteNames[2];
   let pitches = [];  
   if (playerChoices.includes(first) && playerChoices.includes(second) && playerChoices.includes(third)) {
-      // console.log("You're ok!");
       for (let i = 0; i < nonChordTones.length; i++) {
         let pitch = nonChordTones[i];
         if (playerChoices.includes(pitch)) {

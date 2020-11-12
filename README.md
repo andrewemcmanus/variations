@@ -42,7 +42,8 @@ See `examples.png` in this repo for some winning and losing examples written in 
 
 Chord and non-chord tones, as well as the order in which the computer plays them, are generated using arrays:
 
-`// generate a major chord:
+```
+// generate a major chord:
 function makeArray() {
     let root = Math.floor(Math.random() * Math.floor(5)) + 1;
     // console.log(root);
@@ -146,4 +147,5 @@ This function stops the timer and evaluates the player's input:
           Tone.context.close();
           return points;
         }
-      };`
+      };
+```
